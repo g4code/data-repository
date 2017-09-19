@@ -61,12 +61,24 @@ class Repository
 
     public function write(Command $command)
     {
+
         // DataMapper::update
         if($this->hasDataMapper()){
-            $this
-                ->storageContainer
-                ->getDataMapper()
-                ->upsert($command);// TODO - add mapping interface
+
+            if($command->isUpsert()){
+                $this
+                    ->storageContainer
+                    ->getDataMapper()
+                    ->upsert($command->getMap());
+            }
+
+            if($command->isDelete()){
+                $this
+                    ->storageContainer
+                    ->getDataMapper()
+                    ->delete($command->getIdentity());
+            }
+
         }
 
         // RussianDoll::expire
