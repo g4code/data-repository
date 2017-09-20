@@ -46,11 +46,21 @@ class Repository
 
         // DataMapper::find -> RussianDoll::write && IdentityMap::set
         if($this->hasDataMapper()){
-            $data = $this->storageContainer->getDataMapper()->find($query->getIdentity()); // TODO - add identity
+            $rawData = $this->storageContainer->getDataMapper()->find($query->getIdentity());
+            $data = $query->isDataTypeOne()
+                ? $rawData->getOne()
+                : $rawData->getAll(); // TODO - add identity
+
             if(!empty($data)){
-                $this
-                    ->saveRussianDoll($query->getKey(), $data)
-                    ->saveIdentityMap($query->getKey(), $data);
+
+                if($this->hasRussianDoll()){
+                    $this->saveRussianDoll($query->getKey(), $data);
+                }
+
+                if($this->hasIdentityMap()){
+                    $this->saveIdentityMap($query->getKey(), $data);
+                }
+
                 return $data;
             }
         }
@@ -65,6 +75,13 @@ class Repository
         // DataMapper::update
         if($this->hasDataMapper()){
 
+            if($command->isDelete()){
+                $this
+                    ->storageContainer
+                    ->getDataMapper()
+                    ->delete($command->getIdentity());
+            }
+
             if($command->isUpsert()){
                 $this
                     ->storageContainer
@@ -72,11 +89,18 @@ class Repository
                     ->upsert($command->getMap());
             }
 
-            if($command->isDelete()){
+            if($command->isInsert()){
                 $this
                     ->storageContainer
                     ->getDataMapper()
-                    ->delete($command->getIdentity());
+                    ->insert($command->getMap());
+            }
+
+            if($command->isUpdate()){
+                $this
+                    ->storageContainer
+                    ->getDataMapper()
+                    ->update($command->getMap(), $command->getIdentity());
             }
 
         }

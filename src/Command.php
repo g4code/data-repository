@@ -5,17 +5,19 @@ namespace G4\DataRepository;
 use G4\DataRepository\Exception\MissingActionException;
 use G4\DataRepository\Exception\MissingIdentityException;
 use G4\DataRepository\Exception\MissingMapperException;
-// TODO - change name to RepositoryCommand
+
 class Command implements CommandInterface
 {
     const ACTION_UPSERT = 'upsert';
     const ACTION_INSERT = 'insert';
     const ACTION_DELETE = 'delete';
+    const ACTION_UPDATE = 'update';
 
     /**
      * @var \G4\DataMapper\Common\MappingInterface
      */
     private $map;
+    private $key;
 
     /**
      * @var \G4\DataMapper\Common\IdentityInterface
@@ -48,40 +50,57 @@ class Command implements CommandInterface
 
     public function getKey()
     {
-        // TODO: Implement getKey() method.
+        return $this->key;
     }
 
-    // TODO - set mapping interface
-    public function setMap(\G4\DataMapper\Common\MappingInterface $map)
+
+    public function setKey($key)
     {
-        $this->map = $map;
+        return $this->key;
+    }
+
+    public function update(\G4\DataMapper\Common\MappingInterface $map, \G4\DataMapper\Common\IdentityInterface $identity)
+    {
+        $this->map      = $map;
+        $this->identity = $identity;
+        $this->action   = self::ACTION_UPDATE;
         return $this;
     }
 
-    /*
-     * @return \G4\DataMapper\Common\IdentityInterface
-     */
-    public function setIdentity(\G4\DataMapper\Common\IdentityInterface $identity)
+    public function upsert(\G4\DataMapper\Common\MappingInterface $map)
+    {
+        $this->map      = $map;
+        $this->action   = self::ACTION_UPSERT;
+        return $this;
+    }
+
+    public function delete(\G4\DataMapper\Common\IdentityInterface $identity)
     {
         $this->identity = $identity;
+        $this->action   = self::ACTION_DELETE;
         return $this;
     }
 
-    public function upsert()
+    public function insert(\G4\DataMapper\Common\MappingInterface $map)
     {
-        $this->action = self::ACTION_UPSERT;
-        return $this;
-    }
-
-    public function delete()
-    {
-        $this->action = self::ACTION_DELETE;
+        $this->map = $map;
+        $this->action = self::ACTION_INSERT;
         return $this;
     }
 
     public function isUpsert()
     {
         return $this->getAction() === self::ACTION_UPSERT;
+    }
+
+    public function isInsert()
+    {
+        return $this->getAction() === self::ACTION_INSERT;
+    }
+
+    public function isUpdate()
+    {
+        return $this->getAction() === self::ACTION_UPDATE;
     }
 
     public function isDelete()
@@ -93,6 +112,7 @@ class Command implements CommandInterface
     {
         if($this->action === self::ACTION_INSERT
             || $this->action === self::ACTION_DELETE
+            || $this->action === self::ACTION_UPDATE
             || $this->action === self::ACTION_UPSERT){
 
             return $this->action;
