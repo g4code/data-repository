@@ -23,12 +23,18 @@ class RepositoryQuery implements QueryInterface
      */
     private $russianDollKey;
 
-    private $dataType;
+    private $getType;
 
 
-    public function getAll()
+    public function useGetAll()
     {
-        $this->dataType = self::DATA_TYPE_ALL;
+        $this->getType = self::DATA_TYPE_ALL;
+        return $this;
+    }
+
+    public function useGetOne()
+    {
+        $this->getType = self::DATA_TYPE_ONE;
         return $this;
     }
 
@@ -41,12 +47,6 @@ class RepositoryQuery implements QueryInterface
             throw new MissingIdentityException();
         }
         return $this->identity;
-    }
-
-    public function getOne()
-    {
-        $this->dataType = self::DATA_TYPE_ONE;
-        return $this;
     }
 
     public function getRussianDollKey()
@@ -65,9 +65,9 @@ class RepositoryQuery implements QueryInterface
         return $this->identityMapKey;
     }
 
-    public function isDataTypeOne()
+    public function isGetTypeOne()
     {
-        return $this->dataType === self::DATA_TYPE_ONE;
+        return $this->getType === self::DATA_TYPE_ONE;
     }
 
     public function setIdentity(\G4\DataMapper\Common\IdentityInterface $identity)

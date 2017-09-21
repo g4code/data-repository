@@ -17,6 +17,6 @@ interface QueryInterface {
      */
     public function getIdentity();
 
-    public function isDataTypeOne();
+    public function isGetTypeOne();
 
 }

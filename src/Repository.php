@@ -48,7 +48,7 @@ class Repository
         // DataMapper::find -> RussianDoll::write && IdentityMap::set
         if($this->hasDataMapper()){
             $rawData = $this->storageContainer->getDataMapper()->find($query->getIdentity());
-            $data = $query->isDataTypeOne()
+            $data = $query->isGetTypeOne()
                 ? $rawData->getOne()
                 : $rawData->getAll(); // TODO - add identity
             if(!empty($data)){
