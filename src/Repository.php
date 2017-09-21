@@ -23,23 +23,24 @@ class Repository
     public function read(QueryInterface $query)
     {
         // IdentityMap::has -> IdentityMap::get
+
         if($this->hasIdentityMap()){
-            $data = $this->storageContainer->getIdentityMap()->get($query->getKey());
+            $data = $this->storageContainer->getIdentityMap()->get($query->getIdentityMapKey());
             if(!empty($data)){
                 return $data;
             }
         }
-
         // RussianDoll::fetch -> IdentityMap::set
         if($this->hasRussianDoll()){
             $data = $this
                 ->storageContainer
                 ->getRussianDoll()
-                ->setKey($query->getKey())
+                ->setKey($query->getRussianDollKey())
                 ->fetch();
             if(!empty($data)){
-                $this
-                    ->saveIdentityMap($query->getKey(), $data);
+                if($this->hasIdentityMap()){
+                    $this->saveIdentityMap($query->getIdentityMapKey(), $data);
+                }
                 return $data;
             }
         }
@@ -50,15 +51,14 @@ class Repository
             $data = $query->isDataTypeOne()
                 ? $rawData->getOne()
                 : $rawData->getAll(); // TODO - add identity
-
             if(!empty($data)){
 
                 if($this->hasRussianDoll()){
-                    $this->saveRussianDoll($query->getKey(), $data);
+                    $this->saveRussianDoll($query->getRussianDollKey(), $data);
                 }
 
                 if($this->hasIdentityMap()){
-                    $this->saveIdentityMap($query->getKey(), $data);
+                    $this->saveIdentityMap($query->getIdentityMapKey(), $data);
                 }
 
                 return $data;
@@ -110,7 +110,7 @@ class Repository
             $this
                 ->storageContainer
                 ->getRussianDoll()
-                ->setKey($command->getKey())
+                ->setKey($command->getRussianDollKey())
                 ->expire();
         }
 
@@ -119,7 +119,7 @@ class Repository
             $this
                 ->storageContainer
                 ->getIdentityMap()
-                ->delete($command->getKey());
+                ->delete($command->getIdentityMapKey());
         }
 
     }

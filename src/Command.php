@@ -4,7 +4,9 @@ namespace G4\DataRepository;
 
 use G4\DataRepository\Exception\MissingActionException;
 use G4\DataRepository\Exception\MissingIdentityException;
+use G4\DataRepository\Exception\MissingIdentityMapKeyException;
 use G4\DataRepository\Exception\MissingMapperException;
+use G4\DataRepository\Exception\MissingRussianDollKeyException;
 
 class Command implements CommandInterface
 {
@@ -17,7 +19,8 @@ class Command implements CommandInterface
      * @var \G4\DataMapper\Common\MappingInterface
      */
     private $map;
-    private $key;
+    private $russianDollKey;
+    private $identityMapKey;
 
     /**
      * @var \G4\DataMapper\Common\IdentityInterface
@@ -53,10 +56,32 @@ class Command implements CommandInterface
         return $this->key;
     }
 
-
-    public function setKey($key)
+    public function getRussianDollKey()
     {
-        return $this->key;
+        if(!$this->russianDollKey instanceof \G4\RussianDoll\Key){
+            throw new MissingRussianDollKeyException();
+        }
+        return $this->russianDollKey;
+    }
+
+    public function getIdentityMapKey()
+    {
+        if(empty($this->identityMapKey)){
+            throw new MissingIdentityMapKeyException();
+        }
+        return $this->identityMapKey;
+    }
+
+    public function setRussianDollKey(\G4\RussianDoll\Key $russianDollKey)
+    {
+        $this->russianDollKey = $russianDollKey;
+        return $this;
+    }
+
+    public function setIdentityMapKey($identityMapKey)
+    {
+        $this->identityMapKey = $identityMapKey;
+        return $this;
     }
 
     public function update(\G4\DataMapper\Common\MappingInterface $map, \G4\DataMapper\Common\IdentityInterface $identity)
