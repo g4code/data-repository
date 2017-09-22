@@ -51,11 +51,6 @@ class RepositoryCommand implements CommandInterface
         return $this->identity;
     }
 
-    public function getKey()
-    {
-        return $this->key;
-    }
-
     public function getRussianDollKey()
     {
         if(!$this->russianDollKey instanceof \G4\RussianDoll\Key){
