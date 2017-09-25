@@ -3,6 +3,8 @@
 namespace G4\DataRepository;
 
 
+use G4\ValueObject\Dictionary;
+
 class ReadRepository
 {
 
@@ -10,6 +12,13 @@ class ReadRepository
      * @var StorageContainer
      */
     private $storageContainer;
+
+    private $response;
+
+    /*
+     * @return RepositoryQuery
+     */
+    private $query;
 
     /**
      * Repository constructor.
@@ -20,87 +29,89 @@ class ReadRepository
         $this->storageContainer = $storageContainer;
     }
 
-    public function read(QueryInterface $query)
+    public function read(RepositoryQuery $query)
     {
-        // IdentityMap::has -> IdentityMap::get
+        $this->query = $query;
+        return $this
+            ->readFromIdentityMap()
+            ->readFromRussianDoll()
+            ->readFromDataMapper()
+            ->getResponse();
+    }
 
-        if($this->hasIdentityMap()){
-            $data = $this->storageContainer->getIdentityMap()->get($query->getIdentityMapKey());
-            if(!empty($data)){
-                return $data;
-            }
+    private function getResponse()
+    {
+        if($this->hasResponse()){
+            return $this->response;
         }
-        // RussianDoll::fetch -> IdentityMap::set
-        if($this->hasRussianDoll()){
-            $data = $this
-                ->storageContainer
-                ->getRussianDoll()
-                ->setKey($query->getRussianDollKey())
-                ->fetch();
-            if(!empty($data)){
-                if($this->hasIdentityMap()){
-                    $this->saveIdentityMap($query->getIdentityMapKey(), $data);
-                }
-                return $data;
-            }
-        }
-
-        // DataMapper::find -> RussianDoll::write && IdentityMap::set
-        if($this->hasDataMapper()){
-            $rawData = $this->storageContainer->getDataMapper()->find($query->getIdentity());
-            $data = $query->isGetTypeOne()
-                ? $rawData->getOne()
-                : $rawData->getAll(); // TODO - add identity
-            if(!empty($data)){
-
-                if($this->hasRussianDoll()){
-                    $this->saveRussianDoll($query->getRussianDollKey(), $data);
-                }
-
-                if($this->hasIdentityMap()){
-                    $this->saveIdentityMap($query->getIdentityMapKey(), $data);
-                }
-
-                return $data;
-            }
-        }
-
         throw new \Exception('Not found','404'); // TODO - create exception
-
     }
 
-    private function hasRussianDoll()
+    private function hasResponse()
     {
-        return $this->storageContainer->hasRussianDoll();
+        return $this->response instanceof RepositoryResponse;
     }
 
-    private function hasIdentityMap()
+    private function readFromIdentityMap()
     {
-        return $this->storageContainer->hasIdentityMap();
-    }
-
-    private function hasDataMapper()
-    {
-        return $this->storageContainer->hasDataMapper();
-    }
-
-    private function saveIdentityMap($key, $data)
-    {
-        if($this->hasIdentityMap()){
-            $this
-                ->storageContainer
-                ->getIdentityMap()
-                ->set($key, $data);
+        if($this->storageContainer->hasIdentityMap() && !$this->hasResponse()){
+            $data = $this->storageContainer->getIdentityMap()->get($this->query->getIdentityMapKey());
+            if(!empty($data)){
+                $this->response = (new RepositoryResponseFactory())->createFromArray(new Dictionary($data));
+            }
         }
         return $this;
     }
 
-    private function saveRussianDoll($key, $data)
+    private function readFromRussianDoll()
     {
-        if($this->hasRussianDoll()){
+        if($this->storageContainer->getRussianDoll() && !$this->hasResponse()){
+            $data = $this
+                ->storageContainer
+                ->getRussianDoll()
+                ->setKey($this->query->getRussianDollKey())
+                ->fetch();
+            if(!empty($data)){
+                $this->saveIdentityMap($data);
+                $this->response = (new RepositoryResponseFactory())->createFromArray(new Dictionary($data));
+            }
+        }
+        return $this;
+    }
+
+    private function readFromDataMapper()
+    {
+        if($this->storageContainer->hasDataMapper() && !$this->hasResponse()){
+            $rawData = $this->storageContainer->getDataMapper()->find($this->query->getIdentity());
+            $response = (new RepositoryResponseFactory())->create($rawData);
+            if($response->hasData()){
+                $data = (new RepositoryResponseFormatter($response))->format();
+                $this
+                    ->saveRussianDoll($data)
+                    ->saveIdentityMap($data);
+                $this->response = $response;
+            }
+        }
+        return $this;
+    }
+
+    private function saveIdentityMap($data)
+    {
+        if($this->storageContainer->hasIdentityMap()){
+            $this
+                ->storageContainer
+                ->getIdentityMap()
+                ->set($this->query->getIdentityMapKey(), $data);
+        }
+        return $this;
+    }
+
+    private function saveRussianDoll($data)
+    {
+        if($this->storageContainer->hasRussianDoll()){
             $this->storageContainer
                 ->getRussianDoll()
-                ->setKey($key)
+                ->setKey($this->query->getRussianDollKey())
                 ->write($data);
         }
         return $this;

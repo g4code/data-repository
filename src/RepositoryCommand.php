@@ -8,7 +8,7 @@ use G4\DataRepository\Exception\MissingIdentityMapKeyException;
 use G4\DataRepository\Exception\MissingMapperException;
 use G4\DataRepository\Exception\MissingRussianDollKeyException;
 
-class RepositoryCommand implements CommandInterface
+class RepositoryCommand 
 {
     const ACTION_UPSERT = 'upsert';
     const ACTION_INSERT = 'insert';

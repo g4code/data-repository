@@ -6,11 +6,8 @@ use G4\DataRepository\Exception\MissingIdentityException;
 use G4\DataRepository\Exception\MissingIdentityMapKeyException;
 use G4\DataRepository\Exception\MissingRussianDollKeyException;
 
-class RepositoryQuery implements QueryInterface
+class RepositoryQuery
 {
-    const DATA_TYPE_ALL = 'all';
-    const DATA_TYPE_ONE = 'one';
-
     /*
      * @var \G4\DataMapper\Common\IdentityInterface
      */
@@ -22,21 +19,6 @@ class RepositoryQuery implements QueryInterface
      * @var \G4\RussianDoll\Key
      */
     private $russianDollKey;
-
-    private $getType;
-
-
-    public function useGetAll()
-    {
-        $this->getType = self::DATA_TYPE_ALL;
-        return $this;
-    }
-
-    public function useGetOne()
-    {
-        $this->getType = self::DATA_TYPE_ONE;
-        return $this;
-    }
 
     /**
      * @return \G4\DataMapper\Common\IdentityInterface
@@ -63,11 +45,6 @@ class RepositoryQuery implements QueryInterface
             throw new MissingIdentityMapKeyException();
         }
         return $this->identityMapKey;
-    }
-
-    public function isGetTypeOne()
-    {
-        return $this->getType === self::DATA_TYPE_ONE;
     }
 
     public function setIdentity(\G4\DataMapper\Common\IdentityInterface $identity)
