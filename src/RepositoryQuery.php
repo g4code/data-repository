@@ -8,6 +8,7 @@ use G4\DataRepository\Exception\MissingRussianDollKeyException;
 
 class RepositoryQuery
 {
+    const DELIMITER = "|";
     /*
      * @var \G4\DataMapper\Common\IdentityInterface
      */
@@ -59,9 +60,9 @@ class RepositoryQuery
         return $this;
     }
 
-    public function setIdentityMapKey($identityMapKey)
+    public function setIdentityMapKey(...$identityMapKey)
     {
-        $this->identityMapKey = $identityMapKey;
+        $this->identityMapKey = join(self::DELIMITER, $identityMapKey);
         return $this;
     }
 }

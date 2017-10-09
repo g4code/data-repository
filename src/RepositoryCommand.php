@@ -14,7 +14,7 @@ class RepositoryCommand
     const ACTION_INSERT = 'insert';
     const ACTION_DELETE = 'delete';
     const ACTION_UPDATE = 'update';
-
+    const DELIMITER     = '|';
     /**
      * @var \G4\DataMapper\Common\MappingInterface
      */
@@ -73,9 +73,9 @@ class RepositoryCommand
         return $this;
     }
 
-    public function setIdentityMapKey($identityMapKey)
+    public function setIdentityMapKey(...$identityMapKey)
     {
-        $this->identityMapKey = $identityMapKey;
+        $this->identityMapKey = join(self::DELIMITER, $identityMapKey);
         return $this;
     }
 

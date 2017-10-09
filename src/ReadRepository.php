@@ -13,6 +13,9 @@ class ReadRepository
      */
     private $storageContainer;
 
+    /*
+     * @return RepositoryResponse
+     */
     private $response;
 
     /*

@@ -3,10 +3,12 @@
 namespace G4\DataRepository;
 
 use G4\DataMapper\Common\MapperInterface;
+use G4\DataMapper\Engine\MySQL\MySQLTableName;
 use G4\IdentityMap\IdentityMap;
 use G4\DataRepository\Exception\MissingStorageException;
 use G4\DataRepository\Exception\NotValidStorageException;
 use G4\RussianDoll\RussianDoll;
+use G4\DataMapper\Builder;
 
 class StorageContainer
 {
@@ -25,6 +27,11 @@ class StorageContainer
      * @var RussianDoll
      */
     private $russianDoll;
+
+    /*
+     * @var Builder
+     */
+    private $dataMapperBuilder;
 
     /**
      * StorageContainer constructor.
@@ -55,6 +62,14 @@ class StorageContainer
     {
         return $this->dataMapper;
     }
+    /*
+     * @return Builder
+     */
+    public function makeDataMapper($datasetName)
+    {
+        $this->dataMapper = $this->dataMapperBuilder->collectionName(new MySQLTableName($datasetName))->buildMapper();
+        return $this;
+    }
 
     /**
      * @return RussianDoll
@@ -83,6 +98,14 @@ class StorageContainer
     /**
      * @return bool
      */
+    public function hasDataMapperBuoder()
+    {
+        return $this->dataMapperBuilder instanceof Builder;
+    }
+
+    /**
+     * @return bool
+     */
     public function hasRussianDoll()
     {
         return $this->russianDoll instanceof RussianDoll;
@@ -102,8 +125,9 @@ class StorageContainer
             $this->russianDoll = $aStorage;
             return;
         }
-        if ($aStorage instanceof MapperInterface) {
-            $this->dataMapper = $aStorage;
+
+        if ($aStorage instanceof Builder) {
+            $this->dataMapperBuilder = $aStorage;
             return;
         }
         throw new NotValidStorageException();
