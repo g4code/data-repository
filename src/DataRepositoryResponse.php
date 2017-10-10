@@ -2,7 +2,7 @@
 
 namespace G4\DataRepository;
 
-class RepositoryResponse
+class DataRepositoryResponse
 {
     private $data;
     private $count;

@@ -3,7 +3,7 @@
 use G4\RussianDoll\RussianDoll;
 use G4\IdentityMap\IdentityMap;
 use G4\DataMapper\Common\MapperInterface;
-use G4\DataRepository\Repository;
+use G4\DataRepository\DataRepository;
 use G4\DataRepository\StorageContainer;
 use G4\DataRepository\Exception\MissingStorageException;
 use G4\DataRepository\Exception\NotValidStorageException;
@@ -20,7 +20,7 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
 
     public function testNotValidStorageException()
     {
-        $stub = $this->getMockBuilder(Repository::class)
+        $stub = $this->getMockBuilder(DataRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
 

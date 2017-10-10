@@ -14,7 +14,7 @@ class ReadRepository
     private $storageContainer;
 
     /*
-     * @return RepositoryResponse
+     * @return DataRepositoryResponse
      */
     private $response;
 
@@ -52,7 +52,7 @@ class ReadRepository
 
     private function hasResponse()
     {
-        return $this->response instanceof RepositoryResponse;
+        return $this->response instanceof DataRepositoryResponse;
     }
 
     private function readFromIdentityMap()

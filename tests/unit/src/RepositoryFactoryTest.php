@@ -1,7 +1,7 @@
 <?php
 
-use G4\DataRepository\RepositoryFactory;
-use G4\DataRepository\Repository;
+use G4\DataRepository\DataRepositoryFactory;
+use G4\DataRepository\DataRepository;
 use G4\DataRepository\StorageContainer;
 use G4\DataMapper\Common\MapperInterface;
 
@@ -15,7 +15,7 @@ class RepositoryFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repositoryFactoryMock = $this->getMockBuilder(RepositoryFactory::class)
+        $repositoryFactoryMock = $this->getMockBuilder(DataRepositoryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['makeStorageContainer'])
             ->getMock();
@@ -25,7 +25,7 @@ class RepositoryFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('makeStorageContainer')
             ->willReturn($storageContainerStub);
 
-        $this->assertInstanceOf(Repository::class, $repositoryFactoryMock->create());
+        $this->assertInstanceOf(DataRepository::class, $repositoryFactoryMock->create());
     }
 
     public function testMakeStorageContainer()
@@ -34,7 +34,7 @@ class RepositoryFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repositoryFactory = new RepositoryFactory($mapperMock);
+        $repositoryFactory = new DataRepositoryFactory($mapperMock);
         $this->assertInstanceOf(StorageContainer::class, $repositoryFactory->makeStorageContainer());
     }
 }

@@ -4,7 +4,7 @@ namespace G4\DataRepository;
 
 use G4\DataRepository\Exception\MissingStorageException;
 
-class RepositoryFactory
+class DataRepositoryFactory
 {
 
     /**
@@ -23,11 +23,11 @@ class RepositoryFactory
     }
 
     /**
-     * @return Repository
+     * @return DataRepository
      */
     public function create()
     {
-        return new Repository($this->makeStorageContainer());
+        return new DataRepository($this->makeStorageContainer());
     }
 
     /**

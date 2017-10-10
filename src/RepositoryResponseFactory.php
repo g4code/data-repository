@@ -8,7 +8,7 @@ class RepositoryResponseFactory
 
     public function create(\G4\DataMapper\Common\RawData $rawData)
     {
-        $response = new RepositoryResponse($rawData->getAll());
+        $response = new DataRepositoryResponse($rawData->getAll());
         $response
             ->setCount($rawData->count())
             ->setTotal($rawData->getTotal());
@@ -17,7 +17,7 @@ class RepositoryResponseFactory
 
     public function createFromArray(Dictionary $data)
     {
-        $response = new RepositoryResponse($data->get(RepositoryConstants::DATA));
+        $response = new DataRepositoryResponse($data->get(RepositoryConstants::DATA));
         $response
             ->setCount($data->get(RepositoryConstants::COUNT))
             ->setTotal($data->get(RepositoryConstants::TOTAL));

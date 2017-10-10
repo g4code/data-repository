@@ -6,7 +6,7 @@ class RepositoryResponseFormatter
 {
     private $repositoryResponse;
 
-    public function __construct(RepositoryResponse $repositoryResponse)
+    public function __construct(DataRepositoryResponse $repositoryResponse)
     {
         $this->repositoryResponse = $repositoryResponse;
     }

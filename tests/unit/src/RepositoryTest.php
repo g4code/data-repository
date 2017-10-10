@@ -1,6 +1,6 @@
 <?php
 
-use G4\DataRepository\Repository;
+use G4\DataRepository\DataRepository;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $storageContainerMock = $this->getMockBuilder(\G4\DataRepository\StorageContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $repository = new Repository($storageContainerMock);
-        $this->assertInstanceOf(Repository::class, $repository);
+        $repository = new DataRepository($storageContainerMock);
+        $this->assertInstanceOf(DataRepository::class, $repository);
     }
 }

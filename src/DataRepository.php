@@ -4,7 +4,7 @@ namespace G4\DataRepository;
 
 use \G4\DataMapper\Common\MappingInterface;
 
-class Repository
+class DataRepository
 {
     const DELIMITER = "|";
 
