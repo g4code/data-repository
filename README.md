@@ -42,14 +42,16 @@ $identity
     ->field('user_id')
     ->equal($profileEntity->getId());
     
+//Update
 $this->repository
     ->setDatasetName('users')
     ->setIdentity($identity)
     ->setIdentityMapKey('users', $userEntity->getId())
     ->setRussianDollKey(new Key('users', $userEntity->getId()))
     ->setMapping(new UserMap($userEntity))) // has to implement MappingInterface
-    ->update();    
-
+    ->update();   
+    
+//Upsert
 $this->repository
     ->setDatasetName('users')
     ->setIdentity($identity)
@@ -58,13 +60,15 @@ $this->repository
     ->setMapping(new UserMap($userEntity))) // has to implement MappingInterface
     ->upsert();   
     
+//Insert    
 $this->repository
     ->setDatasetName('users')
     ->setIdentityMapKey('users', $userEntity->getId())
     ->setRussianDollKey(new Key('users', $userEntity->getId()))
     ->setMapping(new UserMap($userEntity))) // has to implement MappingInterface
-    ->insert();      
-
+    ->insert(); 
+    
+//Delete
 $this->repository
     ->setDatasetName('users')
     ->setIdentity($identity)
