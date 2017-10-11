@@ -35,18 +35,19 @@ $dataRepository = (new DataRepositoryFactory(
     new \G4\IdentityMap\IdentityMap()
 ))->create();
 
+$userEntity = new UserEntity();
 
 $identity = new Identity();
 $identity
     ->field('user_id')
-    ->equal(12345);
+    ->equal($profileEntity->getId());
     
 $response =  $this->repository
     ->setDatasetName('users')
     ->setIdentity($identity)
-    ->setIdentityMapKey('users', 12345)
-    ->setRussianDollKey(new Key('users', 12345))
-    ->setMapping(new ProfileMap())) // has to implement MappingInterface
+    ->setIdentityMapKey('users', $userEntity->getId())
+    ->setRussianDollKey(new Key('users', $userEntity->getId()))
+    ->setMapping(new UserMap($userEntity))) // has to implement MappingInterface
     ->update();    
 
 
