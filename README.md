@@ -42,7 +42,7 @@ $identity
     ->field('user_id')
     ->equal($profileEntity->getId());
     
-$response =  $this->repository
+$this->repository
     ->setDatasetName('users')
     ->setIdentity($identity)
     ->setIdentityMapKey('users', $userEntity->getId())
@@ -50,6 +50,27 @@ $response =  $this->repository
     ->setMapping(new UserMap($userEntity))) // has to implement MappingInterface
     ->update();    
 
+$this->repository
+    ->setDatasetName('users')
+    ->setIdentity($identity)
+    ->setIdentityMapKey('users', $userEntity->getId())
+    ->setRussianDollKey(new Key('users', $userEntity->getId()))
+    ->setMapping(new UserMap($userEntity))) // has to implement MappingInterface
+    ->upsert();   
+    
+$this->repository
+    ->setDatasetName('users')
+    ->setIdentityMapKey('users', $userEntity->getId())
+    ->setRussianDollKey(new Key('users', $userEntity->getId()))
+    ->setMapping(new UserMap($userEntity))) // has to implement MappingInterface
+    ->insert();      
+
+$this->repository
+    ->setDatasetName('users')
+    ->setIdentity($identity)
+    ->setIdentityMapKey('users', $userEntity->getId())
+    ->setRussianDollKey(new Key('users', $userEntity->getId()))
+    ->delete();      
 
 /***************** Simple mysql select *****************/
 
