@@ -3,6 +3,7 @@ Data Repository
 ```php
 <?php 
 
+/***************** mysql, russian doll, memory select *****************/
 $dataRepository = (new DataRepositoryFactory(
     Builder::create()->adapter(ew \G4\DataMapper\Engine\MySQL\MySQLAdapter(
         new \G4\DataMapper\Engine\MySQL\MySQLClientFactory($configData)
@@ -24,7 +25,7 @@ $response =  $this->repository
     ->select();    
 
 
-
+/***************** Simple mysql select *****************/
 $dataRepository = (new DataRepositoryFactory(
     Builder::create()->adapter(ew \G4\DataMapper\Engine\MySQL\MySQLAdapter(
         new \G4\DataMapper\Engine\MySQL\MySQLClientFactory($configData)
