@@ -41,11 +41,13 @@ use G4\RussianDoll\Key;
 use G4\RussianDoll\RussianDoll;
 
 // Create instance
+
 $dataRepository = (new DataRepositoryFactory(
             Builder::create()->adapter(new MySQLAdapter(new MySQLClientFactory([]))),
             new RussianDoll(McacheFactory::createInstance('__driver_name__', [], '__prefix__')),
             new IdentityMap()
         ))->create();
+
 
 // Read flow with: data-mapper's mysql engine, russian-doll and identity-map 
 
@@ -62,6 +64,7 @@ $response = $dataRepository
     ->select();
 
 var_dump($response);
+
 
 // Write flow (insert, update, upsert, delete) with: data-mapper's mysql engine, russian-doll, and identity-map 
 
@@ -97,6 +100,7 @@ $this->repository
     ->setIdentityMapKey('__table_name__', '__field_name__', '__field_value__')
     ->setRussianDollKey(new Key('__table_name__', '__field_name__', '__field_value__'))
     ->delete();
+```
 
 ## Development
 
