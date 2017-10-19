@@ -100,6 +100,13 @@ $this->repository
     ->setIdentityMapKey('__table_name__', '__field_name__', '__field_value__')
     ->setRussianDollKey(new Key('__table_name__', '__field_name__', '__field_value__'))
     ->delete();
+    
+ $this->repository
+    ->setDatasetName('__table_name__')
+    ->setIdentityMapKey('__table_name__', '__field_name__', '__field_value__')
+    ->setRussianDollKey(new Key('__table_name__', '__field_name__', '__field_value__'))
+    ->command('DELETE FROM __table_name__ WHERE __field_name__ = __field_value__');
+ 
 ```
 
 ## Development
