@@ -105,7 +105,7 @@ $this->repository
     ->setDatasetName('__table_name__')
     ->setIdentityMapKey('__table_name__')
     ->setRussianDollKey(new Key('__table_name__'))
-    ->query('SELECT * FROM __table_name__);  
+    ->query('SELECT * FROM __table_name__');  
    
  $this->repository
     ->setDatasetName('__table_name__')
