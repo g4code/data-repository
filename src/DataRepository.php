@@ -56,12 +56,6 @@ class DataRepository
         return $this->russianDollKey;
     }
 
-//    public function read(RepositoryQuery $query)
-//    {
-//        // IdentityMap::has -> IdentityMap::get
-//        return (new ReadRepository($this->storageContainer))->read($query);
-//    }
-
     public function setDatasetName($datasetName)
     {
         $this->storageContainer->makeDataMapper($datasetName);
@@ -106,6 +100,28 @@ class DataRepository
         }
 
         return (new ReadRepository($this->storageContainer))->read($query);
+    }
+
+    public function query($customQuery)
+    {
+        $query = new RepositoryQuery();
+        $query->setCustomQuery($customQuery);
+        if($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
+            $query->setRussianDollKey($this->getRussianDollKey());
+        }
+
+        if(!empty($this->identityMapKey)){
+            $query->setIdentityMapKey($this->getIdentityMapKey());
+        }
+
+        return (new ReadRepository($this->storageContainer))->read($query);
+    }
+
+    public function command($customCommand)
+    {
+        $command = $this->getCommand();
+        $command->setCustomCommand($customCommand);
+        (new WriteRepository($this->storageContainer))->write($command);
     }
 
     public function setMapping(MappingInterface $map)
@@ -155,9 +171,4 @@ class DataRepository
         }
         return $command;
     }
-//    public function write(RepositoryCommand $command)
-//    {
-//        (new WriteRepository($this->storageContainer))->write($command);
-//    }
-
 }

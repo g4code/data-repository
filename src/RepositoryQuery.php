@@ -16,6 +16,8 @@ class RepositoryQuery
 
     private $identityMapKey;
 
+    private $customQuery;
+
     /*
      * @var \G4\RussianDoll\Key
      */
@@ -48,6 +50,14 @@ class RepositoryQuery
         return $this->identityMapKey;
     }
 
+    public function getCustomQuery()
+    {
+        if(!$this->hasCustomQuery()){
+            throw new \Exception('invalid query', 400);
+        }
+        return $this->customQuery;
+    }
+
     public function setIdentity(\G4\DataMapper\Common\IdentityInterface $identity)
     {
         $this->identity = $identity;
@@ -64,5 +74,16 @@ class RepositoryQuery
     {
         $this->identityMapKey = join(self::DELIMITER, $identityMapKey);
         return $this;
+    }
+
+    public function setCustomQuery($query)
+    {
+        $this->customQuery = $query;
+        return $this;
+    }
+
+    public function hasCustomQuery()
+    {
+        return !empty($this->customQuery);
     }
 }

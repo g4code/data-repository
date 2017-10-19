@@ -85,8 +85,14 @@ class ReadRepository
     private function readFromDataMapper()
     {
         if($this->storageContainer->hasDataMapper() && !$this->hasResponse()){
-            $rawData = $this->storageContainer->getDataMapper()->find($this->query->getIdentity());
+
+            $dataMapper = $this->storageContainer->getDataMapper();
+            $rawData = $this->query->hasCustomQuery()
+                ? $dataMapper->query($this->query->getCustomQuery())
+                : $dataMapper->find($this->query->getIdentity());
+
             $response = (new RepositoryResponseFactory())->create($rawData);
+
             if($response->hasData()){
                 $data = (new RepositoryResponseFormatter($response))->format();
                 $this

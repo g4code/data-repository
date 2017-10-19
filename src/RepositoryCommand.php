@@ -14,6 +14,7 @@ class RepositoryCommand
     const ACTION_INSERT = 'insert';
     const ACTION_DELETE = 'delete';
     const ACTION_UPDATE = 'update';
+    const CUSTOM_COMMAND= 'custom_command';
     const DELIMITER     = '|';
     /**
      * @var \G4\DataMapper\Common\MappingInterface
@@ -21,6 +22,7 @@ class RepositoryCommand
     private $map;
     private $russianDollKey;
     private $identityMapKey;
+    private $customCommand;
 
     /**
      * @var \G4\DataMapper\Common\IdentityInterface
@@ -128,16 +130,46 @@ class RepositoryCommand
         return $this->getAction() === self::ACTION_DELETE;
     }
 
+    public function isCustomCommand()
+    {
+        return $this->getAction() === self::CUSTOM_COMMAND;
+    }
+
     private function getAction()
     {
-        if($this->action === self::ACTION_INSERT
+        if(
+            $this->action === self::ACTION_INSERT
             || $this->action === self::ACTION_DELETE
             || $this->action === self::ACTION_UPDATE
-            || $this->action === self::ACTION_UPSERT){
+            || $this->action === self::ACTION_UPSERT
+            || $this->action === self::CUSTOM_COMMAND
+        ){
 
             return $this->action;
         }
         throw new MissingActionException();
     }
+
+    public function hasCustomCommand()
+    {
+        return !empty($this->customCommand);
+    }
+
+    public function getCustomCommand()
+    {
+        if(!$this->hasCustomCommand()){
+            throw new \Exception('Missing command', 400);
+        }
+        return $this->customCommand;
+    }
+
+    public function setCustomCommand($customCommand)
+    {
+        $this->action = self::CUSTOM_COMMAND;
+        $this->customCommand = $customCommand;
+        return $this;
+    }
+
+
 
 }

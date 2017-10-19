@@ -84,6 +84,14 @@ class WriteRepository
                 ->getDataMapper()
                 ->update($command->getMap(), $command->getIdentity());
         }
+
+        if($command->isCustomCommand()){
+            $this
+                ->storageContainer
+                ->getDataMapper()
+                ->query($command->getCustomCommand());
+        }
+
     }
 
 }
