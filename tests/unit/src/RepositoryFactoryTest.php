@@ -4,10 +4,12 @@ use G4\DataRepository\DataRepositoryFactory;
 use G4\DataRepository\DataRepository;
 use G4\DataRepository\StorageContainer;
 use G4\DataMapper\Common\MapperInterface;
+use G4\DataMapper\Builder;
 
 class RepositoryFactoryTest extends \PHPUnit_Framework_TestCase
 {
 
+    private $mapperBuilderStub;
 
     public function testCreate()
     {
@@ -30,11 +32,16 @@ class RepositoryFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testMakeStorageContainer()
     {
-        $mapperMock = $this->getMockBuilder(MapperInterface::class)
+        $this->mapperBuilderStub = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repositoryFactory = new DataRepositoryFactory($mapperMock);
+        $this->mapperBuilderStub
+            ->method('collectionName')
+            ->willReturn($this->mapperBuilderStub);
+
+        $repositoryFactory = new DataRepositoryFactory($this->mapperBuilderStub);
+
         $this->assertInstanceOf(StorageContainer::class, $repositoryFactory->makeStorageContainer());
     }
 }
