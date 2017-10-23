@@ -39,23 +39,6 @@ class DataRepository
         $this->storageContainer = $storageContainer;
     }
 
-
-    public function getIdentity()
-    {
-        return $this->identity;
-    }
-
-
-    public function getIdentityMapKey()
-    {
-        return $this->identityMapKey;
-    }
-
-    public function getRussianDollKey()
-    {
-        return $this->russianDollKey;
-    }
-
     public function setDatasetName($datasetName)
     {
         $this->storageContainer->makeDataMapper($datasetName);
@@ -156,6 +139,21 @@ class DataRepository
         $command = $this->getCommand();
         $command->delete($this->getIdentity());
         (new WriteRepository($this->storageContainer))->write($command);
+    }
+
+    private function getIdentity()
+    {
+        return $this->identity;
+    }
+
+    private function getIdentityMapKey()
+    {
+        return $this->identityMapKey;
+    }
+
+    private function getRussianDollKey()
+    {
+        return $this->russianDollKey;
     }
 
     private function getCommand()
