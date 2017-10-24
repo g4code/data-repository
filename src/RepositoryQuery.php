@@ -2,6 +2,7 @@
 
 namespace G4\DataRepository;
 
+use G4\DataRepository\Exception\InvalidQueryException;
 use G4\DataRepository\Exception\MissingIdentityException;
 use G4\DataRepository\Exception\MissingIdentityMapKeyException;
 use G4\DataRepository\Exception\MissingRussianDollKeyException;
@@ -53,7 +54,7 @@ class RepositoryQuery
     public function getCustomQuery()
     {
         if(!$this->hasCustomQuery()){
-            throw new \Exception('invalid query', 400);
+            throw new InvalidQueryException();
         }
         return $this->customQuery;
     }

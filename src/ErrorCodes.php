@@ -12,4 +12,5 @@ class ErrorCodes
     const MISSING_IDENTITY_EXCEPTION            = 30005;
     const MISSING_RUSSIAN_DOLL_EXCEPTION        = 30006;
     const MISSING_IDENTITY_MAP_KEY_EXCEPTION    = 30007;
+    const INVALID_QUERY_EXCEPTION               = 30008;
 }
