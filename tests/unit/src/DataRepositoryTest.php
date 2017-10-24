@@ -62,7 +62,14 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testQuerry()
     {
         $repository = new DataRepository($this->storageContainerMock);
-        $this->assertEquals(null, $repository->command("select * from  " . self::TABLE_NAME));
+        $this->setExpectedException('\Exception', 'Not found', 404);
+        $repository->query("select * from  " . self::TABLE_NAME);
+    }
+
+    public function testCommand()
+    {
+        $repository = new DataRepository($this->storageContainerMock);
+        $this->assertEquals(null, $repository->command("DELETE from  " . self::TABLE_NAME . " WHERE id = 1"));
     }
 
     public function testInsert()
