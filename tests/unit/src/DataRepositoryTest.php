@@ -33,10 +33,7 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSetRussianDollKey()
     {
-        $key = $this->getMockBuilder(\G4\RussianDoll\Key::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $key = $this->getRussianDollKey();
         $repository = new DataRepository($this->storageContainerMock);
         $this->assertInstanceOf(DataRepository::class, $repository->setRussianDollKey($key));
     }
@@ -62,6 +59,9 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testQuerry()
     {
         $repository = new DataRepository($this->storageContainerMock);
+        $repository
+            ->setRussianDollKey($this->getRussianDollKey())
+            ->setIdentityMapKey('some_key');
         $this->setExpectedException('\Exception', 'Not found', 404);
         $repository->query("select * from  " . self::TABLE_NAME);
     }
@@ -69,7 +69,21 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testCommand()
     {
         $repository = new DataRepository($this->storageContainerMock);
+        $repository
+            ->setRussianDollKey($this->getRussianDollKey())
+            ->setIdentityMapKey('some_key');
         $this->assertEquals(null, $repository->command("DELETE from  " . self::TABLE_NAME . " WHERE id = 1"));
+    }
+
+    public function testSelect()
+    {
+        $repository = new DataRepository($this->storageContainerMock);
+        $repository
+            ->setIdentity($this->getIdentity())
+            ->setRussianDollKey($this->getRussianDollKey())
+            ->setIdentityMapKey('some_key');
+        $this->setExpectedException('\Exception', 'Not found', 404);
+        $repository->select();
     }
 
     public function testInsert()
@@ -84,6 +98,14 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new DataRepository($this->storageContainerMock);
         $repository->setMapping($this->getMappingMock());
         $this->assertEquals(null, $repository->upsert());
+    }
+
+    public function testUpdate()
+    {
+        $repository = new DataRepository($this->storageContainerMock);
+        $repository->setIdentity($this->getIdentity());
+        $repository->setMapping($this->getMappingMock());
+        $this->assertEquals(null, $repository->update());
     }
 
     public function testDelete()
@@ -105,5 +127,13 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
         return  $this->getMockBuilder(\G4\DataMapper\Common\IdentityInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    private function getRussianDollKey()
+    {
+        return $this->getMockBuilder(\G4\RussianDoll\Key::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
     }
 }
