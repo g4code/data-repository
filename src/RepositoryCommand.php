@@ -3,6 +3,7 @@
 namespace G4\DataRepository;
 
 use G4\DataRepository\Exception\MissingActionException;
+use G4\DataRepository\Exception\MissingCustomCommandException;
 use G4\DataRepository\Exception\MissingIdentityException;
 use G4\DataRepository\Exception\MissingIdentityMapKeyException;
 use G4\DataRepository\Exception\MissingMapperException;
@@ -158,7 +159,7 @@ class RepositoryCommand
     public function getCustomCommand()
     {
         if(!$this->hasCustomCommand()){
-            throw new \Exception('Missing command', 400);
+            throw new MissingCustomCommandException();
         }
         return $this->customCommand;
     }

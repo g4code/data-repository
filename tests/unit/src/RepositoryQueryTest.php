@@ -35,7 +35,6 @@ class RepositoryQueryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdentityException()
     {
-        $this->query;
         $this->expectException(\G4\DataRepository\Exception\MissingIdentityException::class);
         $this->query->getIdentity();
     }
@@ -50,7 +49,6 @@ class RepositoryQueryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRussianDollKeyException()
     {
-        $this->query;
         $this->expectException(\G4\DataRepository\Exception\MissingRussianDollKeyException::class);
         $this->query->getRussianDollKey();
     }
@@ -65,7 +63,6 @@ class RepositoryQueryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdentityMapKeyException()
     {
-        $this->query;
         $this->expectException(\G4\DataRepository\Exception\MissingIdentityMapKeyException::class);
         $this->query->getIdentityMapKey();
     }
@@ -80,7 +77,6 @@ class RepositoryQueryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomQueryException()
     {
-        $this->query;
         $this->expectException(\G4\DataRepository\Exception\InvalidQueryException::class);
         $this->query->getCustomQuery();
     }
