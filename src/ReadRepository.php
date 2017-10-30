@@ -3,6 +3,7 @@
 namespace G4\DataRepository;
 
 
+use G4\DataRepository\Exception\NotFoundException;
 use G4\ValueObject\Dictionary;
 
 class ReadRepository
@@ -47,7 +48,7 @@ class ReadRepository
         if($this->hasResponse()){
             return $this->response;
         }
-        throw new \Exception('Not found','404'); // TODO - create exception
+        throw new NotFoundException();
     }
 
     private function hasResponse()
