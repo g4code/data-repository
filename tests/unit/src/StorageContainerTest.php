@@ -83,4 +83,12 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($storageContainer->hasRussianDoll());
         $this->assertTrue($storageContainer->hasDataMapper());
     }
+
+    public function testHasDataMapperBuilder()
+    {
+        $storageContainer = new StorageContainer([$this->russianDollStub, $this->identityMapStub, $this->mapperBuilderStub]);
+        $storageContainer->makeDataMapper('__table_name__');
+
+        $this->assertTrue($storageContainer->hasDataMapperBuilder());
+    }
 }

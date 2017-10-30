@@ -98,7 +98,7 @@ class StorageContainer
     /**
      * @return bool
      */
-    public function hasDataMapperBuoder()
+    public function hasDataMapperBuilder()
     {
         return $this->dataMapperBuilder instanceof Builder;
     }
