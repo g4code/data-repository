@@ -36,6 +36,64 @@ class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DataRepositoryResponse::class, $response);
     }
 
+    // TODO - tmp - write better
+    public function testReadFromIdentity()
+    {
+        $identityMapMock = $this->getIdentityMock();
+
+        $query = $this->getQueryMock();
+        $query->method('getIdentity')->willReturn($identityMapMock);
+
+        $mapperMock =  $this->getDataMapperMock();
+        $mapperMock->method('find')->willReturn($this->getRawDataMock());
+
+        $storage = $this->getMockBuilder(\G4\DataRepository\StorageContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $identity = $this->getIdentityMapMock();
+        $identity->method('get')->willReturn($this->getData());
+
+        $storage->method('hasRussianDoll')->willReturn(true);
+        $storage->method('hasDataMapper')->willReturn(true);
+        $storage->method('hasIdentityMap')->willReturn(true);
+        $storage->method('getRussianDoll')->willReturn($this->getRussianDollMock());
+        $storage->method('getIdentityMap')->willReturn($identity);
+        $storage->method('getDataMapper')->willReturn($mapperMock);
+
+        $response = (new ReadRepository($storage))->read($query);
+        $this->assertInstanceOf(DataRepositoryResponse::class, $response);
+    }
+
+
+    // TODO - tmp - write better
+    public function testReadFromRussiandDoll()
+    {
+        $identityMapMock = $this->getIdentityMock();
+
+        $query = $this->getQueryMock();
+        $query->method('getIdentity')->willReturn($identityMapMock);
+
+        $mapperMock =  $this->getDataMapperMock();
+
+        $storage = $this->getMockBuilder(\G4\DataRepository\StorageContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $russianDollMock = $this->getRussianDollMock();
+        $russianDollMock->method('fetch')->willReturn($this->getData());
+
+        $storage->method('hasRussianDoll')->willReturn(true);
+        $storage->method('hasDataMapper')->willReturn(true);
+        $storage->method('hasIdentityMap')->willReturn(true);
+        $storage->method('getRussianDoll')->willReturn($russianDollMock);
+        $storage->method('getIdentityMap')->willReturn($this->getIdentityMapMock());
+        $storage->method('getDataMapper')->willReturn($mapperMock);
+
+        $response = (new ReadRepository($storage))->read($query);
+        $this->assertInstanceOf(DataRepositoryResponse::class, $response);
+    }
+
 
     private function getStorageMock()
     {
@@ -135,5 +193,19 @@ class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
         $mock->method('count')->willReturn(1);
         $mock->method('getTotal')->willReturn(1);
         return $mock;
+    }
+
+    private function getData()
+    {
+        return [
+            'data'  => [
+                [
+                    'user_id'   => 1,
+                    'usernmae'  => 'blabla'
+                ]
+            ],
+            'total' => 1,
+            'count' => 1
+        ];
     }
 }
