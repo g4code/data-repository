@@ -2,7 +2,6 @@
 
 namespace G4\DataRepository;
 
-
 class WriteRepository
 {
     /**
@@ -22,17 +21,17 @@ class WriteRepository
     public function write(RepositoryCommand $command)
     {
         // DataMapper::update
-        if($this->storageContainer->hasDataMapper()){
+        if ($this->storageContainer->hasDataMapper()) {
             $this->writeDataMapper($command);
         }
 
         // RussianDoll::expire
-        if($this->storageContainer->hasRussianDoll()){
+        if ($this->storageContainer->hasRussianDoll()) {
             $this->invalidateRussianDoll($command);
         }
 
         // IdentityMap::delete
-        if($this->storageContainer->hasIdentityMap()){
+        if ($this->storageContainer->hasIdentityMap()) {
             $this->invalidateIdentityMap($command);
         }
     }
@@ -57,41 +56,39 @@ class WriteRepository
 
     private function writeDataMapper(RepositoryCommand $command)
     {
-        if($command->isDelete()){
+        if ($command->isDelete()) {
             $this
                 ->storageContainer
                 ->getDataMapper()
                 ->delete($command->getIdentity());
         }
 
-        if($command->isUpsert()){
+        if ($command->isUpsert()) {
             $this
                 ->storageContainer
                 ->getDataMapper()
                 ->upsert($command->getMap());
         }
 
-        if($command->isInsert()){
+        if ($command->isInsert()) {
             $this
                 ->storageContainer
                 ->getDataMapper()
                 ->insert($command->getMap());
         }
 
-        if($command->isUpdate()){
+        if ($command->isUpdate()) {
             $this
                 ->storageContainer
                 ->getDataMapper()
                 ->update($command->getMap(), $command->getIdentity());
         }
 
-        if($command->isCustomCommand()){
+        if ($command->isCustomCommand()) {
             $this
                 ->storageContainer
                 ->getDataMapper()
                 ->query($command->getCustomCommand());
         }
-
     }
-
 }

@@ -37,5 +37,4 @@ class DataRepositoryFactory
     {
         return new StorageContainer($this->storages);
     }
-
 }

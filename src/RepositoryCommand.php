@@ -9,7 +9,7 @@ use G4\DataRepository\Exception\MissingIdentityMapKeyException;
 use G4\DataRepository\Exception\MissingMapperException;
 use G4\DataRepository\Exception\MissingRussianDollKeyException;
 
-class RepositoryCommand 
+class RepositoryCommand
 {
     const ACTION_UPSERT = 'upsert';
     const ACTION_INSERT = 'insert';
@@ -37,7 +37,7 @@ class RepositoryCommand
      */
     public function getMap()
     {
-        if(!$this->map instanceof \G4\DataMapper\Common\MappingInterface){
+        if (!$this->map instanceof \G4\DataMapper\Common\MappingInterface) {
             throw new MissingMapperException();
         }
         return $this->map;
@@ -48,7 +48,7 @@ class RepositoryCommand
      */
     public function getIdentity()
     {
-        if(!$this->identity instanceof \G4\DataMapper\Common\IdentityInterface){
+        if (!$this->identity instanceof \G4\DataMapper\Common\IdentityInterface) {
             throw new MissingIdentityException();
         }
         return $this->identity;
@@ -56,7 +56,7 @@ class RepositoryCommand
 
     public function getRussianDollKey()
     {
-        if(!$this->russianDollKey instanceof \G4\RussianDoll\Key){
+        if (!$this->russianDollKey instanceof \G4\RussianDoll\Key) {
             throw new MissingRussianDollKeyException();
         }
         return $this->russianDollKey;
@@ -64,7 +64,7 @@ class RepositoryCommand
 
     public function getIdentityMapKey()
     {
-        if(empty($this->identityMapKey)){
+        if (empty($this->identityMapKey)) {
             throw new MissingIdentityMapKeyException();
         }
         return $this->identityMapKey;
@@ -138,14 +138,12 @@ class RepositoryCommand
 
     private function getAction()
     {
-        if(
-            $this->action === self::ACTION_INSERT
+        if ($this->action === self::ACTION_INSERT
             || $this->action === self::ACTION_DELETE
             || $this->action === self::ACTION_UPDATE
             || $this->action === self::ACTION_UPSERT
             || $this->action === self::CUSTOM_COMMAND
-        ){
-
+        ) {
             return $this->action;
         }
         throw new MissingActionException();
@@ -158,7 +156,7 @@ class RepositoryCommand
 
     public function getCustomCommand()
     {
-        if(!$this->hasCustomCommand()){
+        if (!$this->hasCustomCommand()) {
             throw new MissingCustomCommandException();
         }
         return $this->customCommand;
@@ -170,7 +168,4 @@ class RepositoryCommand
         $this->customCommand = $customCommand;
         return $this;
     }
-
-
-
 }

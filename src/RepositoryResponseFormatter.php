@@ -19,5 +19,4 @@ class RepositoryResponseFormatter
             RepositoryConstants::DATA      => $this->repositoryResponse->getAll(),
         ];
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace G4\DataRepository;
 
-
 use G4\DataRepository\Exception\NotFoundException;
 use G4\ValueObject\Dictionary;
 
@@ -45,7 +44,7 @@ class ReadRepository
 
     private function getResponse()
     {
-        if($this->hasResponse()){
+        if ($this->hasResponse()) {
             return $this->response;
         }
         throw new NotFoundException();
@@ -58,9 +57,9 @@ class ReadRepository
 
     private function readFromIdentityMap()
     {
-        if($this->storageContainer->hasIdentityMap() && !$this->hasResponse()){
+        if ($this->storageContainer->hasIdentityMap() && !$this->hasResponse()) {
             $data = $this->storageContainer->getIdentityMap()->get($this->query->getIdentityMapKey());
-            if(!empty($data)){
+            if (!empty($data)) {
                 $this->response = (new RepositoryResponseFactory())->createFromArray(new Dictionary($data));
             }
         }
@@ -69,13 +68,13 @@ class ReadRepository
 
     private function readFromRussianDoll()
     {
-        if($this->storageContainer->getRussianDoll() && !$this->hasResponse()){
+        if ($this->storageContainer->getRussianDoll() && !$this->hasResponse()) {
             $data = $this
                 ->storageContainer
                 ->getRussianDoll()
                 ->setKey($this->query->getRussianDollKey())
                 ->fetch();
-            if(!empty($data)){
+            if (!empty($data)) {
                 $this->saveIdentityMap($data);
                 $this->response = (new RepositoryResponseFactory())->createFromArray(new Dictionary($data));
             }
@@ -85,8 +84,7 @@ class ReadRepository
 
     private function readFromDataMapper()
     {
-        if($this->storageContainer->hasDataMapper() && !$this->hasResponse()){
-
+        if ($this->storageContainer->hasDataMapper() && !$this->hasResponse()) {
             $dataMapper = $this->storageContainer->getDataMapper();
             $rawData = $this->query->hasCustomQuery()
                 ? $dataMapper->query($this->query->getCustomQuery())
@@ -94,7 +92,7 @@ class ReadRepository
 
             $response = (new RepositoryResponseFactory())->create($rawData);
 
-            if($response->hasData()){
+            if ($response->hasData()) {
                 $data = (new RepositoryResponseFormatter($response))->format();
                 $this
                     ->saveRussianDoll($data)
@@ -107,7 +105,7 @@ class ReadRepository
 
     private function saveIdentityMap($data)
     {
-        if($this->storageContainer->hasIdentityMap()){
+        if ($this->storageContainer->hasIdentityMap()) {
             $this
                 ->storageContainer
                 ->getIdentityMap()
@@ -118,7 +116,7 @@ class ReadRepository
 
     private function saveRussianDoll($data)
     {
-        if($this->storageContainer->hasRussianDoll()){
+        if ($this->storageContainer->hasRussianDoll()) {
             $this->storageContainer
                 ->getRussianDoll()
                 ->setKey($this->query->getRussianDollKey())
@@ -126,5 +124,4 @@ class ReadRepository
         }
         return $this;
     }
-
 }

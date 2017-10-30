@@ -2,7 +2,6 @@
 
 namespace G4\DataRepository;
 
-
 class RepositoryConstants
 {
     const TOTAL = 'total';

@@ -70,15 +70,15 @@ class DataRepository
     {
         $query = new RepositoryQuery();
 
-        if($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
+        if ($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
             $query->setRussianDollKey($this->getRussianDollKey());
         }
 
-        if($this->getIdentity() instanceof \G4\DataMapper\Common\IdentityInterface){
+        if ($this->getIdentity() instanceof \G4\DataMapper\Common\IdentityInterface) {
             $query->setIdentity($this->getIdentity());
         }
 
-        if(!empty($this->identityMapKey)){
+        if (!empty($this->identityMapKey)) {
             $query->setIdentityMapKey($this->getIdentityMapKey());
         }
 
@@ -89,11 +89,11 @@ class DataRepository
     {
         $query = new RepositoryQuery();
         $query->setCustomQuery($customQuery);
-        if($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
+        if ($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
             $query->setRussianDollKey($this->getRussianDollKey());
         }
 
-        if(!empty($this->identityMapKey)){
+        if (!empty($this->identityMapKey)) {
             $query->setIdentityMapKey($this->getIdentityMapKey());
         }
 
@@ -160,11 +160,11 @@ class DataRepository
     {
         $command = new RepositoryCommand();
 
-        if($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
+        if ($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
             $command->setRussianDollKey($this->getRussianDollKey());
         }
 
-        if(!empty($this->identityMapKey)){
+        if (!empty($this->identityMapKey)) {
             $command->setIdentityMapKey($this->getIdentityMapKey());
         }
         return $command;

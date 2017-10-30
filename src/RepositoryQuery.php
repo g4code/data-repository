@@ -29,7 +29,7 @@ class RepositoryQuery
      */
     public function getIdentity()
     {
-        if(!$this->identity instanceof \G4\DataMapper\Common\IdentityInterface){
+        if (!$this->identity instanceof \G4\DataMapper\Common\IdentityInterface) {
             throw new MissingIdentityException();
         }
         return $this->identity;
@@ -37,7 +37,7 @@ class RepositoryQuery
 
     public function getRussianDollKey()
     {
-        if(!$this->russianDollKey instanceof \G4\RussianDoll\Key){
+        if (!$this->russianDollKey instanceof \G4\RussianDoll\Key) {
             throw new MissingRussianDollKeyException();
         }
         return $this->russianDollKey;
@@ -45,7 +45,7 @@ class RepositoryQuery
 
     public function getIdentityMapKey()
     {
-        if(empty($this->identityMapKey)){
+        if (empty($this->identityMapKey)) {
             throw new MissingIdentityMapKeyException();
         }
         return $this->identityMapKey;
@@ -53,7 +53,7 @@ class RepositoryQuery
 
     public function getCustomQuery()
     {
-        if(!$this->hasCustomQuery()){
+        if (!$this->hasCustomQuery()) {
             throw new InvalidQueryException();
         }
         return $this->customQuery;

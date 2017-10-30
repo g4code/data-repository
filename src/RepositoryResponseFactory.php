@@ -1,6 +1,7 @@
 <?php
 
 namespace G4\DataRepository;
+
 use G4\ValueObject\Dictionary;
 
 class RepositoryResponseFactory
@@ -23,5 +24,4 @@ class RepositoryResponseFactory
             ->setTotal($data->get(RepositoryConstants::TOTAL));
         return $response;
     }
-
 }

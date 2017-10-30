@@ -42,7 +42,7 @@ class StorageContainer
         if (empty($storages)) {
             throw new MissingStorageException();
         }
-        foreach($storages as $aStorage) {
+        foreach ($storages as $aStorage) {
             $this->addStorage($aStorage);
         }
     }
