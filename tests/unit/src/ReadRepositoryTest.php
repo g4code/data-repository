@@ -15,9 +15,25 @@ class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
         $query->method('getIdentity')->willReturn($this->getIdentityMock());
 
         $storage = $this->getStorageMock();
-        $storage->method('getDataMapper')->willReturn($this->getDataMapperMock());
+        $mapperMock =  $this->getDataMapperMock();
+        $mapperMock->method('find')->willReturn($this->getEmptyRawDataMock());
+        $storage->method('getDataMapper')->willReturn($mapperMock);
         $response = (new ReadRepository($storage))->read($query);
+    }
 
+    public function testRead()
+    {
+        $query = $this->getQueryMock();
+        $query->method('getIdentity')->willReturn($this->getIdentityMock());
+
+        $mapperMock =  $this->getDataMapperMock();
+        $mapperMock->method('find')->willReturn($this->getRawDataMock());
+
+        $storage = $this->getStorageMock();
+        $storage->method('getDataMapper')->willReturn($mapperMock);
+
+        $response = (new ReadRepository($storage))->read($query);
+        $this->assertInstanceOf(DataRepositoryResponse::class, $response);
     }
 
 
@@ -84,7 +100,6 @@ class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
         $mock =  $this->getMockBuilder(\G4\DataMapper\Common\MapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $mock->method('find')->willReturn($this->getRawDataMock());
         return $mock;
     }
 
@@ -95,7 +110,7 @@ class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    private function getRawDataMock()
+    private function getEmptyRawDataMock()
     {
         $mock =  $this->getMockBuilder(\G4\DataMapper\Common\RawData::class)
             ->disableOriginalConstructor()
@@ -103,6 +118,22 @@ class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
         $mock->method('getAll')->willReturn([]);
         $mock->method('count')->willReturn(0);
         $mock->method('getTotal')->willReturn(0);
+        return $mock;
+    }
+
+    private function getRawDataMock()
+    {
+        $mock =  $this->getMockBuilder(\G4\DataMapper\Common\RawData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mock->method('getAll')->willReturn([
+            [
+                'user_id'   => 1,
+                'usernmae'  => 'blabla'
+            ]
+        ]);
+        $mock->method('count')->willReturn(1);
+        $mock->method('getTotal')->willReturn(1);
         return $mock;
     }
 }
