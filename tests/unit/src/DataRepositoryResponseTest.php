@@ -26,10 +26,7 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->response = new DataRepositoryResponse($this->data);
-        $this->response
-            ->setCount(2)
-            ->setTotal(4);
+        $this->response = new DataRepositoryResponse($this->data, 2, 4);
     }
 
     public function tearDown()
@@ -63,13 +60,4 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $this->response->hasData());
     }
 
-    public function testsetTotal()
-    {
-        $this->assertInstanceOf(DataRepositoryResponse::class, $this->response->setTotal(3));
-    }
-
-    public function testsetCount()
-    {
-        $this->assertInstanceOf(DataRepositoryResponse::class, $this->response->setCount(2));
-    }
 }

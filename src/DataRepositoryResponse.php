@@ -8,9 +8,11 @@ class DataRepositoryResponse
     private $count;
     private $total;
 
-    public function __construct(array $currentItems)
+    public function __construct(array $currentItems, $count, $total)
     {
-        $this->data = $currentItems;
+        $this->data     = $currentItems;
+        $this->count    = $count;
+        $this->total    = $total;
     }
 
     public function count()
@@ -38,17 +40,5 @@ class DataRepositoryResponse
     public function hasData()
     {
         return !empty($this->data);
-    }
-
-    public function setCount($count)
-    {
-        $this->count = $count;
-        return $this;
-    }
-
-    public function setTotal($total)
-    {
-        $this->total = $total;
-        return $this;
     }
 }

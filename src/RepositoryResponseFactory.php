@@ -9,28 +9,24 @@ class RepositoryResponseFactory
 
     public function create(\G4\DataMapper\Common\RawData $rawData)
     {
-        $response = new DataRepositoryResponse($rawData->getAll());
-        $response
-            ->setCount($rawData->count())
-            ->setTotal($rawData->getTotal());
-        return $response;
+        return new DataRepositoryResponse(
+            $rawData->getAll(),
+            $rawData->count(),
+            $rawData->getTotal()
+        );
     }
 
     public function createFromArray(Dictionary $data)
     {
-        $response = new DataRepositoryResponse($data->get(RepositoryConstants::DATA));
-        $response
-            ->setCount($data->get(RepositoryConstants::COUNT))
-            ->setTotal($data->get(RepositoryConstants::TOTAL));
-        return $response;
+        return new DataRepositoryResponse(
+            $data->get(RepositoryConstants::DATA),
+            $data->get(RepositoryConstants::COUNT),
+            $data->get(RepositoryConstants::TOTAL)
+        );
     }
 
     public function createEmptyResponse()
     {
-        $response = new DataRepositoryResponse([]);
-        $response
-            ->setCount(0)
-            ->setTotal(0);
-        return $response;
+        return new DataRepositoryResponse([], 0, 0);
     }
 }
