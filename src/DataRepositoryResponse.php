@@ -2,6 +2,11 @@
 
 namespace G4\DataRepository;
 
+use G4\DataRepository\Exception\MissingResponseAllDataException;
+use G4\DataRepository\Exception\MissingResponseCountException;
+use G4\DataRepository\Exception\MissingResponseOneDataException;
+use G4\DataRepository\Exception\MissingResponseTotalException;
+
 class DataRepositoryResponse
 {
     private $data;
@@ -17,28 +22,38 @@ class DataRepositoryResponse
 
     public function count()
     {
+        if(!$this->hasData()){
+            throw new MissingResponseCountException();
+        }
         return $this->count;
     }
 
     public function getAll()
     {
+        if(!$this->hasData()){
+            throw new MissingResponseAllDataException();
+        }
         return $this->data;
     }
 
     public function getOne()
     {
-        return $this->count() > 0
-            ? current($this->data)
-            : null; // TODO - throw exception
+        if(!$this->hasData()){
+            throw new MissingResponseOneDataException();
+        }
+        return current($this->data);
     }
 
     public function getTotal()
     {
+        if(!$this->hasData()){
+            throw new MissingResponseTotalException();
+        }
         return $this->total;
     }
 
     public function hasData()
     {
-        return !empty($this->data);
+        return count($this->data) !== 0;
     }
 }

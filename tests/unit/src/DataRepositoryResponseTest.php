@@ -40,9 +40,21 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->response->count());
     }
 
+    public function testCountException()
+    {
+        $this->expectException(\G4\DataRepository\Exception\MissingResponseCountException::class);
+        $this->emptyResponseFactory()->count();
+    }
+
     public function testTotal()
     {
         $this->assertEquals(4, $this->response->getTotal());
+    }
+
+    public function testTotalException()
+    {
+        $this->expectException(\G4\DataRepository\Exception\MissingResponseTotalException::class);
+        $this->emptyResponseFactory()->getTotal();
     }
 
     public function testGetAll()
@@ -50,14 +62,30 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data, $this->response->getAll());
     }
 
+    public function testGetAllException()
+    {
+        $this->expectException(\G4\DataRepository\Exception\MissingResponseAllDataException::class);
+        $this->emptyResponseFactory()->getAll();
+    }
+
     public function testGetOne()
     {
         $this->assertEquals($this->data[0], $this->response->getOne());
     }
 
+    public function testGetOneException()
+    {
+        $this->expectException(\G4\DataRepository\Exception\MissingResponseOneDataException::class);
+        $this->emptyResponseFactory()->getOne();
+    }
+
     public function testHasData()
     {
         $this->assertEquals(true, $this->response->hasData());
+    }
+
+    private function emptyResponseFactory(){
+        return new DataRepositoryResponse([], 0, 0);
     }
 
 }

@@ -14,4 +14,8 @@ class ErrorCodes
     const MISSING_IDENTITY_MAP_KEY_EXCEPTION    = 30007;
     const INVALID_QUERY_EXCEPTION               = 30008;
     const MISSING_CUSTOM_COMMAND_EXCEPTION      = 30009;
+    const MISSING_RESPONSE_TOTAL                = 30010;
+    const MISSING_RESPONSE_COUNT                = 30011;
+    const MISSING_RESPONSE_ALL_DATA             = 30012;
+    const MISSING_RESPONSE_ONE_DATA             = 30013;
 }
