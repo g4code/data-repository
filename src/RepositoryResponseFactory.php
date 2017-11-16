@@ -24,4 +24,13 @@ class RepositoryResponseFactory
             ->setTotal($data->get(RepositoryConstants::TOTAL));
         return $response;
     }
+
+    public function createEmptyResponse()
+    {
+        $response = new DataRepositoryResponse([]);
+        $response
+            ->setCount(0)
+            ->setTotal(0);
+        return $response;
+    }
 }

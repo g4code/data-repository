@@ -2,7 +2,6 @@
 
 namespace G4\DataRepository;
 
-use G4\DataRepository\Exception\NotFoundException;
 use G4\ValueObject\Dictionary;
 
 class ReadRepository
@@ -44,10 +43,9 @@ class ReadRepository
 
     private function getResponse()
     {
-        if ($this->hasResponse()) {
-            return $this->response;
-        }
-        throw new NotFoundException();
+        return $this->hasResponse()
+            ? $this->response
+            : (new RepositoryResponseFactory())->createEmptyResponse();
     }
 
     private function hasResponse()

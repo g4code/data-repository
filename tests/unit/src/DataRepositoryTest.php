@@ -62,8 +62,8 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
         $repository
             ->setRussianDollKey($this->getRussianDollKey())
             ->setIdentityMapKey('some_key');
-        $this->setExpectedException('\Exception', 'Not found', 404);
-        $repository->query("select * from  " . self::TABLE_NAME);
+        $response = $repository->query("select * from  " . self::TABLE_NAME);
+        $this->assertFalse($response->hasData());
     }
 
     public function testCommand()
@@ -82,8 +82,8 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setIdentity($this->getIdentity())
             ->setRussianDollKey($this->getRussianDollKey())
             ->setIdentityMapKey('some_key');
-        $this->setExpectedException('\Exception', 'Not found', 404);
-        $repository->select();
+        $response = $repository->select();
+        $this->assertFalse($response->hasData());
     }
 
     public function testInsert()

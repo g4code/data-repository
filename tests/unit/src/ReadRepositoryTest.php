@@ -7,10 +7,8 @@ use G4\DataMapper\Common\MappingInterface;
 class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testReadException()
+    public function testReadEmpty()
     {
-        $this->expectException(\G4\DataRepository\Exception\NotFoundException::class);
-
         $query = $this->getQueryMock();
         $query->method('getIdentity')->willReturn($this->getIdentityMock());
 
@@ -19,6 +17,7 @@ class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
         $mapperMock->method('find')->willReturn($this->getEmptyRawDataMock());
         $storage->method('getDataMapper')->willReturn($mapperMock);
         $response = (new ReadRepository($storage))->read($query);
+        $this->assertFalse($response->hasData());
     }
 
     public function testRead()
