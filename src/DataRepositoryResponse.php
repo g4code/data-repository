@@ -22,7 +22,7 @@ class DataRepositoryResponse
 
     public function count()
     {
-        if(!$this->hasData()){
+        if (!$this->hasData()) {
             throw new MissingResponseCountException();
         }
         return $this->count;
@@ -30,7 +30,7 @@ class DataRepositoryResponse
 
     public function getAll()
     {
-        if(!$this->hasData()){
+        if (!$this->hasData()) {
             throw new MissingResponseAllDataException();
         }
         return $this->data;
@@ -38,7 +38,7 @@ class DataRepositoryResponse
 
     public function getOne()
     {
-        if(!$this->hasData()){
+        if (!$this->hasData()) {
             throw new MissingResponseOneDataException();
         }
         return current($this->data);
@@ -46,7 +46,7 @@ class DataRepositoryResponse
 
     public function getTotal()
     {
-        if(!$this->hasData()){
+        if (!$this->hasData()) {
             throw new MissingResponseTotalException();
         }
         return $this->total;
