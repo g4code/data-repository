@@ -14,3 +14,11 @@ script:
     - composer psr2
     - composer test-report
     - composer code-coverage
+
+notifications:
+  email:
+    recipients:
+      - drasko.gomboc@gmail.com
+      - zeljkosbgd@gmail.com
+    on_success: never # default: change
+    on_failure: always # default: always

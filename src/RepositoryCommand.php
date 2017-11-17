@@ -8,6 +8,8 @@ use G4\DataRepository\Exception\MissingIdentityException;
 use G4\DataRepository\Exception\MissingIdentityMapKeyException;
 use G4\DataRepository\Exception\MissingMapperException;
 use G4\DataRepository\Exception\MissingRussianDollKeyException;
+use G4\DataMapper\Common\IdentityInterface;
+use G4\DataMapper\Common\MappingInterface;
 
 class RepositoryCommand
 {
@@ -82,7 +84,7 @@ class RepositoryCommand
         return $this;
     }
 
-    public function update(\G4\DataMapper\Common\MappingInterface $map, \G4\DataMapper\Common\IdentityInterface $identity)
+    public function update(MappingInterface $map, IdentityInterface $identity)
     {
         $this->map      = $map;
         $this->identity = $identity;
