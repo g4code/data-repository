@@ -63,8 +63,6 @@ $response = $dataRepository
     ->setRussianDollKey(new Key('__table_name__', '__field_name__', '__field_value__'))
     ->select();
 
-var_dump($response);
-
 
 // Write flow (insert, update, upsert, delete) with: data-mapper's mysql engine, russian-doll, and identity-map 
 
