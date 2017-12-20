@@ -95,8 +95,8 @@ class ReadRepository
                 $this
                     ->saveRussianDoll($data)
                     ->saveIdentityMap($data);
-                $this->response = $response;
             }
+            $this->response = $response;
         }
         return $this;
     }
