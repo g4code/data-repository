@@ -35,15 +35,14 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
         $this->response = null;
     }
 
+    public function testHasData()
+    {
+        $this->assertTrue($this->response->hasData());
+    }
+
     public function testCount()
     {
         $this->assertEquals(2, $this->response->count());
-    }
-
-    public function testCountException()
-    {
-        $this->expectException(\G4\DataRepository\Exception\MissingResponseCountException::class);
-        $this->emptyResponseFactory()->count();
     }
 
     public function testTotal()
@@ -51,21 +50,9 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(4, $this->response->getTotal());
     }
 
-    public function testTotalException()
-    {
-        $this->expectException(\G4\DataRepository\Exception\MissingResponseTotalException::class);
-        $this->emptyResponseFactory()->getTotal();
-    }
-
     public function testGetAll()
     {
         $this->assertEquals($this->data, $this->response->getAll());
-    }
-
-    public function testGetAllException()
-    {
-        $this->expectException(\G4\DataRepository\Exception\MissingResponseAllDataException::class);
-        $this->emptyResponseFactory()->getAll();
     }
 
     public function testGetOne()
@@ -73,15 +60,31 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data[0], $this->response->getOne());
     }
 
+    public function testHasDataForEmpty()
+    {
+        $this->assertFalse($this->emptyResponseFactory()->hasData());
+    }
+
+    public function testCountForEmpty()
+    {
+        $this->assertEquals(0, $this->emptyResponseFactory()->count());
+    }
+
+    public function testTotalForEmpty()
+    {
+        $this->assertEquals(0, $this->emptyResponseFactory()->getTotal());
+    }
+
+    public function testGetAllForEmpty()
+    {
+        $this->expectException(\G4\DataRepository\Exception\MissingResponseAllDataException::class);
+        $this->emptyResponseFactory()->getAll();
+    }
+
     public function testGetOneException()
     {
         $this->expectException(\G4\DataRepository\Exception\MissingResponseOneDataException::class);
         $this->emptyResponseFactory()->getOne();
-    }
-
-    public function testHasData()
-    {
-        $this->assertEquals(true, $this->response->hasData());
     }
 
     private function emptyResponseFactory(){
