@@ -3,9 +3,7 @@
 namespace G4\DataRepository;
 
 use G4\DataRepository\Exception\MissingResponseAllDataException;
-use G4\DataRepository\Exception\MissingResponseCountException;
 use G4\DataRepository\Exception\MissingResponseOneDataException;
-use G4\DataRepository\Exception\MissingResponseTotalException;
 
 class DataRepositoryResponse
 {
