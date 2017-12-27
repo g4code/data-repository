@@ -39,7 +39,7 @@
     },
     "require": {
         "php"               : ">=5.4",
-        "g4/russian-doll"   : "0.*",
+        "g4/russian-doll"   : ">=0.4.5",
         "g4/identity-map"   : "1.*",
         "g4/data-mapper"    : "dev-release/1.0.0"
     },

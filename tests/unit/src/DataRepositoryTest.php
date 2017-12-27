@@ -29,6 +29,7 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository = new DataRepository($this->storageContainerMock);
         $this->assertInstanceOf(DataRepository::class, $repository->setIdentity($identity));
+        $this->assertSame($identity, $repository->getIdentity());
     }
 
     public function testSetRussianDollKey()
@@ -36,12 +37,32 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
         $key = $this->getRussianDollKey();
         $repository = new DataRepository($this->storageContainerMock);
         $this->assertInstanceOf(DataRepository::class, $repository->setRussianDollKey($key));
+        $this->assertSame($key, $repository->getRussianDollKey());
+    }
+
+    public function testSetRussianDollKeySetsIdentityMapKey()
+    {
+        $key = $this->getRussianDollKey();
+        $repository = new DataRepository($this->storageContainerMock);
+        $repository->setRussianDollKey($key);
+        $this->assertNotNull($repository->getIdentityMapKey());
     }
 
     public function testSetIdentityMapKey()
     {
         $repository = new DataRepository($this->storageContainerMock);
         $this->assertInstanceOf(DataRepository::class, $repository->setIdentityMapKey(self::TABLE_NAME));
+        $this->assertInternalType('string', $repository->getIdentityMapKey());
+        $this->assertEquals(self::TABLE_NAME, $repository->getIdentityMapKey());
+        $this->assertNotNull($repository->getIdentityMapKey());
+    }
+
+    public function testSetIdentityMapKeyCompound()
+    {
+        $keyParts = ['123', '345'];
+        $repository = new DataRepository($this->storageContainerMock);
+        $this->assertInstanceOf(DataRepository::class, $repository->setIdentityMapKey($keyParts[0], $keyParts[1]));
+        $this->assertEquals(implode('|', $keyParts), $repository->getIdentityMapKey());
     }
 
     public function testSetDatasetName()
@@ -56,7 +77,7 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DataRepository::class, $repository->setMapping($this->getMappingMock()));
     }
 
-    public function testQuerry()
+    public function testQuery()
     {
         $repository = new DataRepository($this->storageContainerMock);
         $repository
@@ -134,6 +155,5 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
         return $this->getMockBuilder(\G4\RussianDoll\Key::class)
             ->disableOriginalConstructor()
             ->getMock();
-
     }
 }

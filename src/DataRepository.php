@@ -54,12 +54,15 @@ class DataRepository
     public function setRussianDollKey(\G4\RussianDoll\Key $russianDollKey)
     {
         $this->russianDollKey = $russianDollKey;
+        if ($this->identityMapKey === null) {
+            $this->identityMapKey = (string) $russianDollKey;
+        }
         return $this;
     }
 
     public function setIdentityMapKey(...$identityMapKey)
     {
-        $this->identityMapKey = join(self::DELIMITER, $identityMapKey);
+        $this->identityMapKey = implode(self::DELIMITER, $identityMapKey);
         return $this;
     }
 
@@ -151,17 +154,17 @@ class DataRepository
         (new WriteRepository($this->storageContainer))->write($command);
     }
 
-    private function getIdentity()
+    public function getIdentity()
     {
         return $this->identity;
     }
 
-    private function getIdentityMapKey()
+    public function getIdentityMapKey()
     {
         return $this->identityMapKey;
     }
 
-    private function getRussianDollKey()
+    public function getRussianDollKey()
     {
         return $this->russianDollKey;
     }
