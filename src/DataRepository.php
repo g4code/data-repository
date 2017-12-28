@@ -54,9 +54,7 @@ class DataRepository
     public function setRussianDollKey(\G4\RussianDoll\Key $russianDollKey)
     {
         $this->russianDollKey = $russianDollKey;
-        if ($this->identityMapKey === null) {
-            $this->identityMapKey = (string) $russianDollKey;
-        }
+        $this->identityMapKey = (string) $russianDollKey;
         return $this;
     }
 
