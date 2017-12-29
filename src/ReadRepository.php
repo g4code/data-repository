@@ -88,7 +88,7 @@ class ReadRepository
         return $this;
     }
 
-    private function readFromDataMapper($saveToCache=true)
+    private function readFromDataMapper($saveToCache = true)
     {
         if ($this->storageContainer->hasDataMapper() && !$this->hasResponse()) {
             $dataMapper = $this->storageContainer->getDataMapper();
