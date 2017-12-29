@@ -101,6 +101,13 @@ class DataRepository
         return (new ReadRepository($this->storageContainer))->read($query);
     }
 
+    public function queryNoCache($customQuery)
+    {
+        $query = new RepositoryQuery();
+        $query->setCustomQuery($customQuery);
+        return (new ReadRepository($this->storageContainer))->read($query);
+    }
+
     public function command($customCommand)
     {
         $command = $this->getCommand();
@@ -124,7 +131,7 @@ class DataRepository
     public function insertId()
     {
         try {
-            $insertId = $this->query('SELECT LAST_INSERT_ID() AS LAST_INSERT_ID')->getOne();
+            $insertId = $this->queryNoCache('SELECT LAST_INSERT_ID() AS LAST_INSERT_ID')->getOne();
             return $insertId['LAST_INSERT_ID'];
         } catch (\Exception $e) {
             return null;
