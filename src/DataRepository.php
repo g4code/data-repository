@@ -105,7 +105,7 @@ class DataRepository
     {
         $query = new RepositoryQuery();
         $query->setCustomQuery($customQuery);
-        return (new ReadRepository($this->storageContainer))->read($query);
+        return (new ReadRepository($this->storageContainer))->readNoCache($query);
     }
 
     public function command($customCommand)

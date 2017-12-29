@@ -41,6 +41,14 @@ class ReadRepository
             ->getResponse();
     }
 
+    public function readNoCache(RepositoryQuery $query)
+    {
+        $this->query = $query;
+        return $this
+            ->readFromDataMapper()
+            ->getResponse();
+    }
+
     private function getResponse()
     {
         return $this->hasResponse()
