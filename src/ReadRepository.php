@@ -45,7 +45,7 @@ class ReadRepository
     {
         $this->query = $query;
         return $this
-            ->readFromDataMapper()
+            ->readFromDataMapper(false)
             ->getResponse();
     }
 
@@ -88,7 +88,7 @@ class ReadRepository
         return $this;
     }
 
-    private function readFromDataMapper()
+    private function readFromDataMapper($saveToCache=true)
     {
         if ($this->storageContainer->hasDataMapper() && !$this->hasResponse()) {
             $dataMapper = $this->storageContainer->getDataMapper();
@@ -98,7 +98,7 @@ class ReadRepository
 
             $response = (new RepositoryResponseFactory())->create($rawData);
 
-            if ($response->hasData()) {
+            if ($response->hasData() && $saveToCache) {
                 $data = (new RepositoryResponseFormatter($response))->format();
                 $this
                     ->saveRussianDoll($data)
