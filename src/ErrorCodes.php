@@ -18,4 +18,5 @@ class ErrorCodes
     const MISSING_RESPONSE_COUNT                = 30011;
     const MISSING_RESPONSE_ALL_DATA             = 30012;
     const MISSING_RESPONSE_ONE_DATA             = 30013;
+    const MISSING_DATASET_NAME_VALUE_EXCEPTION  = 33014;
 }

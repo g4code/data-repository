@@ -8,6 +8,7 @@ use G4\DataRepository\DataRepository;
 use G4\DataRepository\StorageContainer;
 use G4\DataRepository\Exception\MissingStorageException;
 use G4\DataRepository\Exception\NotValidStorageException;
+use G4\DataRepository\Exception\MissingDatasetNameValueException;
 
 class StorageContainerTest extends PHPUnit_Framework_TestCase
 {
@@ -70,10 +71,19 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
         new StorageContainer([$stub]);
     }
 
+    public function testMissingDatasetNameValueException()
+    {
+        $this->expectException(MissingDatasetNameValueException::class);
+
+        $storageContainer = new StorageContainer([$this->mapperBuilderStub]);
+        $storageContainer->getDataMapper();
+    }
+
     public function testGetters()
     {
         $storageContainer = new StorageContainer([$this->russianDollStub, $this->identityMapStub, $this->mapperBuilderStub]);
-        $storageContainer->makeDataMapper('__table_name__');
+        $storageContainer->setDatasetName('__table_name__');
+        $storageContainer->getDataMapper();
 
         $this->assertEquals($this->identityMapStub, $storageContainer->getIdentityMap());
         $this->assertEquals($this->russianDollStub, $storageContainer->getRussianDoll());
@@ -87,7 +97,8 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
     public function testHasDataMapperBuilder()
     {
         $storageContainer = new StorageContainer([$this->russianDollStub, $this->identityMapStub, $this->mapperBuilderStub]);
-        $storageContainer->makeDataMapper('__table_name__');
+        $storageContainer->setDatasetName('__table_name__');
+        $storageContainer->getDataMapper();
 
         $this->assertTrue($storageContainer->hasDataMapperBuilder());
     }

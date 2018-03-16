@@ -9,6 +9,7 @@ use G4\DataRepository\Exception\MissingStorageException;
 use G4\DataRepository\Exception\NotValidStorageException;
 use G4\RussianDoll\RussianDoll;
 use G4\DataMapper\Builder;
+use G4\DataRepository\Exception\MissingDatasetNameValueException;
 
 class StorageContainer
 {
@@ -33,9 +34,12 @@ class StorageContainer
      */
     private $dataMapperBuilder;
 
+    private $datasetName;
+
     /**
      * StorageContainer constructor.
      * @param array $storages
+     * @throws MissingStorageException
      */
     public function __construct(array $storages)
     {
@@ -57,17 +61,28 @@ class StorageContainer
 
     /**
      * @return MapperInterface
+     * @throws MissingDatasetNameValueException
      */
     public function getDataMapper()
     {
+        if (!$this->dataMapper instanceof MapperInterface) {
+            if ($this->datasetName === null) {
+                throw new MissingDatasetNameValueException();
+            }
+
+            $this->dataMapper = $this->makeDataMapper();
+        }
+
         return $this->dataMapper;
     }
-    /*
-     * @return Builder
+
+    /**
+     * @param $datasetName
+     * @return $this
      */
-    public function makeDataMapper($datasetName)
+    public function setDatasetName($datasetName)
     {
-        $this->dataMapper = $this->dataMapperBuilder->collectionName(new MySQLTableName($datasetName))->buildMapper();
+        $this->datasetName = $datasetName;
         return $this;
     }
 
@@ -92,7 +107,7 @@ class StorageContainer
      */
     public function hasDataMapper()
     {
-        return $this->dataMapper instanceof MapperInterface;
+        return $this->getDataMapper() instanceof MapperInterface;
     }
 
     /**
@@ -131,5 +146,15 @@ class StorageContainer
             return;
         }
         throw new NotValidStorageException();
+    }
+
+    /**
+     * @return MapperInterface
+     */
+    private function makeDataMapper()
+    {
+        return $this->dataMapperBuilder
+            ->collectionName(new MySQLTableName($this->datasetName))
+            ->buildMapper();
     }
 }

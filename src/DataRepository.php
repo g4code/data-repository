@@ -39,9 +39,13 @@ class DataRepository
         $this->storageContainer = $storageContainer;
     }
 
+    /**
+     * @param $datasetName
+     * @return $this
+     */
     public function setDatasetName($datasetName)
     {
-        $this->storageContainer->makeDataMapper($datasetName);
+        $this->storageContainer->setDatasetName($datasetName);
         return $this;
     }
 
