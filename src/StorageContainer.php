@@ -2,6 +2,7 @@
 
 namespace G4\DataRepository;
 
+use G4\DataMapper\Common\Bulk;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Engine\MySQL\MySQLTableName;
 use G4\IdentityMap\IdentityMap;
@@ -23,6 +24,11 @@ class StorageContainer
      * @var MapperInterface
      */
     private $dataMapper;
+
+    /**
+     * @var Bulk
+     */
+    private $dataMapperBulk;
 
     /**
      * @var RussianDoll
@@ -77,6 +83,23 @@ class StorageContainer
     }
 
     /**
+     * @return Bulk
+     * @throws MissingDatasetNameValueException
+     */
+    public function getDataMapperBulk()
+    {
+        if (!$this->dataMapperBulk instanceof Bulk) {
+            if ($this->datasetName === null) {
+                throw new MissingDatasetNameValueException();
+            }
+
+            $this->dataMapperBulk = $this->makeDataMapperBulk();
+        }
+
+        return $this->dataMapperBulk;
+    }
+
+    /**
      * @param $datasetName
      * @return $this
      */
@@ -108,6 +131,22 @@ class StorageContainer
     public function hasDataMapper()
     {
         return $this->getDataMapper() instanceof MapperInterface;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDataMapperBulk()
+    {
+        return $this->getDataMapperBulk() instanceof Bulk;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDatasetName()
+    {
+        return $this->datasetName !== null;
     }
 
     /**
@@ -156,5 +195,15 @@ class StorageContainer
         return $this->dataMapperBuilder
             ->collectionName(new MySQLTableName($this->datasetName))
             ->buildMapper();
+    }
+
+    /**
+     * @return Bulk
+     */
+    private function makeDataMapperBulk()
+    {
+        return $this->dataMapperBuilder
+            ->collectionName(new MySQLTableName($this->datasetName))
+            ->buildBulk();
     }
 }

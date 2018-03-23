@@ -19,8 +19,9 @@ class RepositoryCommand
     const ACTION_UPDATE = 'update';
     const CUSTOM_COMMAND= 'custom_command';
     const DELIMITER     = '|';
+
     /**
-     * @var \G4\DataMapper\Common\MappingInterface
+     * @var MapperCollection
      */
     private $map;
     private $russianDollKey;
@@ -35,18 +36,20 @@ class RepositoryCommand
     private $action;
 
     /**
-     * @return \G4\DataMapper\Common\MappingInterface
+     * @return MapperCollection
+     * @throws MissingMapperException
      */
     public function getMap()
     {
-        if (!$this->map instanceof \G4\DataMapper\Common\MappingInterface) {
+        if (!$this->map instanceof MapperCollection) {
             throw new MissingMapperException();
         }
         return $this->map;
     }
 
     /**
-     * @return  \G4\DataMapper\Common\IdentityInterface
+     * @return IdentityInterface
+     * @throws MissingIdentityException
      */
     public function getIdentity()
     {
@@ -84,7 +87,7 @@ class RepositoryCommand
         return $this;
     }
 
-    public function update(MappingInterface $map, IdentityInterface $identity)
+    public function update(MapperCollection $map, IdentityInterface $identity)
     {
         $this->map      = $map;
         $this->identity = $identity;
@@ -92,7 +95,7 @@ class RepositoryCommand
         return $this;
     }
 
-    public function upsert(\G4\DataMapper\Common\MappingInterface $map)
+    public function upsert(MapperCollection $map)
     {
         $this->map      = $map;
         $this->action   = self::ACTION_UPSERT;
@@ -106,9 +109,9 @@ class RepositoryCommand
         return $this;
     }
 
-    public function insert(\G4\DataMapper\Common\MappingInterface $map)
+    public function insert(MapperCollection $maps)
     {
-        $this->map = $map;
+        $this->map = $maps;
         $this->action = self::ACTION_INSERT;
         return $this;
     }

@@ -3,6 +3,7 @@
 use G4\RussianDoll\RussianDoll;
 use G4\IdentityMap\IdentityMap;
 use G4\DataMapper\Builder;
+use G4\DataMapper\Common\Bulk;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataRepository\DataRepository;
 use G4\DataRepository\StorageContainer;
@@ -16,6 +17,7 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
     private $identityMapStub;
     private $russianDollStub;
     private $mapperStub;
+    private $mapperStubBulk;
     private $mapperBuilderStub;
 
     public function setUp()
@@ -32,6 +34,10 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->mapperStubBulk = $this->getMockBuilder(Bulk::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->mapperBuilderStub = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -44,7 +50,9 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
             ->method('buildMapper')
             ->willReturn($this->mapperStub);
 
-
+        $this->mapperBuilderStub
+            ->method('buildBulk')
+            ->willReturn($this->mapperStubBulk);
     }
 
     public function tearDown()
@@ -79,6 +87,14 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
         $storageContainer->getDataMapper();
     }
 
+    public function testMissingDatasetNameValueExceptionBulk()
+    {
+        $this->expectException(MissingDatasetNameValueException::class);
+
+        $storageContainer = new StorageContainer([$this->mapperBuilderStub]);
+        $storageContainer->getDataMapperBulk();
+    }
+
     public function testGetters()
     {
         $storageContainer = new StorageContainer([$this->russianDollStub, $this->identityMapStub, $this->mapperBuilderStub]);
@@ -92,6 +108,11 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($storageContainer->hasIdentityMap());
         $this->assertTrue($storageContainer->hasRussianDoll());
         $this->assertTrue($storageContainer->hasDataMapper());
+
+        $storageContainer->getDataMapper();
+
+        $this->assertEquals($this->mapperStubBulk, $storageContainer->getDataMapperBulk());
+        $this->assertTrue($storageContainer->hasDataMapperBulk());
     }
 
     public function testHasDataMapperBuilder()
@@ -101,5 +122,14 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
         $storageContainer->getDataMapper();
 
         $this->assertTrue($storageContainer->hasDataMapperBuilder());
+    }
+
+    public function testHasDatesetName()
+    {
+        $storageContainer = new StorageContainer([$this->russianDollStub, $this->identityMapStub, $this->mapperBuilderStub]);
+        $this->assertFalse($storageContainer->hasDatasetName());
+
+        $storageContainer->setDatasetName('__table_name__');
+        $this->assertTrue($storageContainer->hasDatasetName());
     }
 }

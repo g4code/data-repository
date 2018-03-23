@@ -1,8 +1,9 @@
 <?php
 
+use G4\RussianDoll\Key;
+use G4\DataRepository\MapperCollection;
 use G4\DataRepository\RepositoryCommand;
 use G4\DataMapper\Common\MappingInterface;
-use G4\RussianDoll\Key;
 use G4\DataMapper\Common\IdentityInterface;
 
 class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
@@ -70,7 +71,7 @@ class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(
             true,
-            $this->command->update($this->getMappingMock(), $this->getIdentityMock())->isUpsert()
+            $this->command->update($this->getMappingCollectionMock(), $this->getIdentityMock())->isUpsert()
         );
     }
 
@@ -86,7 +87,7 @@ class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(
             true,
-            $this->command->insert($this->getMappingMock())->isInsert()
+            $this->command->insert($this->getMappingCollectionMock())->isInsert()
         );
     }
 
@@ -94,7 +95,7 @@ class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(
             true,
-            $this->command->update($this->getMappingMock(), $this->getIdentityMock())->isUpdate()
+            $this->command->update($this->getMappingCollectionMock(), $this->getIdentityMock())->isUpdate()
         );
     }
 
@@ -106,8 +107,8 @@ class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMap()
     {
-        $map = $this->command->update($this->getMappingMock(), $this->getIdentityMock())->getMap();
-        $this->assertInstanceOf(MappingInterface::class, $map);
+        $map = $this->command->update($this->getMappingCollectionMock(), $this->getIdentityMock())->getMap();
+        $this->assertInstanceOf(MapperCollection::class, $map);
     }
 
     public function testGetMapException()
@@ -135,13 +136,6 @@ class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    private function getMappingMock()
-    {
-        return $this->getMockBuilder(MappingInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     private function getIdentityMock()
     {
         return $this->getMockBuilder(IdentityInterface::class)
@@ -149,4 +143,10 @@ class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    private function getMappingCollectionMock()
+    {
+        return $this->getMockBuilder(MapperCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
 }
