@@ -75,6 +75,7 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $repository = new DataRepository($this->storageContainerMock);
         $this->assertInstanceOf(DataRepository::class, $repository->setMapping($this->getMappingMock()));
+        $this->assertInstanceOf(DataRepository::class, $repository->setMapping($this->getMappingMock(), $this->getMappingMock()));
     }
 
     public function testQuery()
@@ -109,13 +110,32 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testInsert()
     {
+        $this->storageContainerMock->expects($this->exactly(1))->method('hasDatasetName')->willReturn(true);
+        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapperBulk');
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+
         $repository = new DataRepository($this->storageContainerMock);
         $repository->setMapping($this->getMappingMock());
         $this->assertEquals(null, $repository->insert());
     }
 
+    public function testInsertBulk()
+    {
+        $this->storageContainerMock->expects($this->exactly(1))->method('hasDatasetName')->willReturn(true);
+        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapper');
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
+
+        $repository = new DataRepository($this->storageContainerMock);
+        $repository->setMapping($this->getMappingMock(), $this->getMappingMock(), $this->getMappingMock());
+        $this->assertEquals(null, $repository->insert());
+    }
+
     public function testUpsert()
     {
+        $this->storageContainerMock->expects($this->exactly(1))->method('hasDatasetName')->willReturn(true);
+        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapperBulk');
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+
         $repository = new DataRepository($this->storageContainerMock);
         $repository->setMapping($this->getMappingMock());
         $this->assertEquals(null, $repository->upsert());
@@ -123,6 +143,10 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
+        $this->storageContainerMock->expects($this->exactly(1))->method('hasDatasetName')->willReturn(true);
+        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapperBulk');
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+
         $repository = new DataRepository($this->storageContainerMock);
         $repository->setIdentity($this->getIdentity());
         $repository->setMapping($this->getMappingMock());
@@ -131,6 +155,10 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
+        $this->storageContainerMock->expects($this->exactly(1))->method('hasDatasetName')->willReturn(true);
+        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapperBulk');
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+
         $repository = new DataRepository($this->storageContainerMock);
         $repository->setIdentity($this->getIdentity());
         $this->assertEquals(null, $repository->delete());
@@ -153,6 +181,20 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
     private function getRussianDollKey()
     {
         return $this->getMockBuilder(\G4\RussianDoll\Key::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function getDataMapperMock()
+    {
+        return $this->getMockBuilder(\G4\DataMapper\Common\MapperInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function getDataMapperBulkMock()
+    {
+        return $this->getMockBuilder(\G4\DataMapper\Common\Bulk::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

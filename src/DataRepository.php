@@ -25,8 +25,8 @@ class DataRepository
      */
     private $russianDollKey;
 
-    /*
-     * @return MappingInterface
+    /**
+     * @var MapperCollection
      */
     private $map;
 
@@ -39,9 +39,13 @@ class DataRepository
         $this->storageContainer = $storageContainer;
     }
 
+    /**
+     * @param $datasetName
+     * @return $this
+     */
     public function setDatasetName($datasetName)
     {
-        $this->storageContainer->makeDataMapper($datasetName);
+        $this->storageContainer->setDatasetName($datasetName);
         return $this;
     }
 
@@ -115,9 +119,9 @@ class DataRepository
         (new WriteRepository($this->storageContainer))->write($command);
     }
 
-    public function setMapping(MappingInterface $map)
+    public function setMapping(MappingInterface ...$maps)
     {
-        $this->map = $map;
+        $this->map = new MapperCollection($maps);
         return $this;
     }
 

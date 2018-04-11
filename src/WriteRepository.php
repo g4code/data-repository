@@ -20,8 +20,7 @@ class WriteRepository
 
     public function write(RepositoryCommand $command)
     {
-        // DataMapper::update
-        if ($this->storageContainer->hasDataMapper()) {
+        if ($this->storageContainer->hasDatasetName()) {
             $this->writeDataMapper($command);
         }
 
@@ -45,7 +44,6 @@ class WriteRepository
             ->expire();
     }
 
-
     private function invalidateIdentityMap(RepositoryCommand $command)
     {
         $this
@@ -54,6 +52,7 @@ class WriteRepository
             ->delete($command->getIdentityMapKey());
     }
 
+    // TODO Sinisa split each method into a new dedicated class
     private function writeDataMapper(RepositoryCommand $command)
     {
         if ($command->isDelete()) {
@@ -64,24 +63,33 @@ class WriteRepository
         }
 
         if ($command->isUpsert()) {
+            $map = $command->getMap()->rewind();
             $this
                 ->storageContainer
                 ->getDataMapper()
-                ->upsert($command->getMap());
+                ->upsert($map->current());
         }
 
         if ($command->isInsert()) {
-            $this
-                ->storageContainer
-                ->getDataMapper()
-                ->insert($command->getMap());
+            if ($command->getMap()->count() > 1) {
+                $mapper = $this->storageContainer->getDataMapperBulk();
+                foreach ($command->getMap() as $map) {
+                    $mapper->add($map);
+                }
+
+                $mapper->insert();
+            } else {
+                $map = $command->getMap()->rewind();
+                $this->storageContainer->getDataMapper()->insert($map->current());
+            }
         }
 
         if ($command->isUpdate()) {
+            $map = $command->getMap()->rewind();
             $this
                 ->storageContainer
                 ->getDataMapper()
-                ->update($command->getMap(), $command->getIdentity());
+                ->update($map->current(), $command->getIdentity());
         }
 
         if ($command->isCustomCommand()) {
