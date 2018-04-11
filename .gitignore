@@ -17,3 +17,4 @@ tests/unit/coverage/*
 .idea/*
 .idea
 .idea/vcs.xml
+.DS_Store
