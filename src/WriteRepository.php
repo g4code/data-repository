@@ -85,11 +85,20 @@ class WriteRepository
         }
 
         if ($command->isUpdate()) {
-            $map = $command->getMap()->rewind();
-            $this
-                ->storageContainer
-                ->getDataMapper()
-                ->update($map->current(), $command->getIdentity());
+            if ($command->getMap()->count() > 1) {
+                $mapper = $this->storageContainer->getDataMapperBulk();
+                foreach ($command->getMap() as $map) {
+                    $mapper->add($map);
+                }
+
+                $mapper->upsert();
+            } else {
+                $map = $command->getMap()->rewind();
+                $this
+                    ->storageContainer
+                    ->getDataMapper()
+                    ->update($map->current(), $command->getIdentity());
+            }
         }
 
         if ($command->isCustomCommand()) {
