@@ -63,11 +63,21 @@ class WriteRepository
         }
 
         if ($command->isUpsert()) {
-            $map = $command->getMap()->rewind();
-            $this
-                ->storageContainer
-                ->getDataMapper()
-                ->upsert($map->current());
+
+            if ($command->getMap()->count() > 1) {
+                $mapper = $this->storageContainer->getDataMapperBulk();
+                foreach ($command->getMap() as $map) {
+                    $mapper->add($map);
+                }
+
+                $mapper->upsert();
+            } else {
+                $map = $command->getMap()->rewind();
+                $this
+                    ->storageContainer
+                    ->getDataMapper()
+                    ->upsert($map->current());
+            }
         }
 
         if ($command->isInsert()) {
@@ -85,20 +95,11 @@ class WriteRepository
         }
 
         if ($command->isUpdate()) {
-            if ($command->getMap()->count() > 1) {
-                $mapper = $this->storageContainer->getDataMapperBulk();
-                foreach ($command->getMap() as $map) {
-                    $mapper->add($map);
-                }
-
-                $mapper->upsert();
-            } else {
-                $map = $command->getMap()->rewind();
-                $this
-                    ->storageContainer
-                    ->getDataMapper()
-                    ->update($map->current(), $command->getIdentity());
-            }
+            $map = $command->getMap()->rewind();
+            $this
+                ->storageContainer
+                ->getDataMapper()
+                ->update($map->current(), $command->getIdentity());
         }
 
         if ($command->isCustomCommand()) {
