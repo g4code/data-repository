@@ -63,7 +63,6 @@ class WriteRepository
         }
 
         if ($command->isUpsert()) {
-
             if ($command->getMap()->count() > 1) {
                 $mapper = $this->storageContainer->getDataMapperBulk();
                 foreach ($command->getMap() as $map) {
