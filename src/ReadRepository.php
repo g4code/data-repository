@@ -7,6 +7,8 @@ use G4\ValueObject\Dictionary;
 class ReadRepository
 {
 
+    const EMPTY_VALUE = 'EMPTY_VALUE';
+
     /**
      * @var StorageContainer
      */
@@ -65,7 +67,11 @@ class ReadRepository
     {
         if ($this->storageContainer->hasIdentityMap() && !$this->hasResponse()) {
             $data = $this->storageContainer->getIdentityMap()->get($this->query->getIdentityMapKey());
-            if (!empty($data)) {
+            if ($data === self::EMPTY_VALUE) {
+                $this->response = (new RepositoryResponseFactory())->createEmptyResponse();
+                return $this;
+            }
+            if ($this->hasNonEmptyData($data)) {
                 $this->response = (new RepositoryResponseFactory())->createFromArray(new Dictionary($data));
             }
         }
@@ -80,7 +86,12 @@ class ReadRepository
                 ->getRussianDoll()
                 ->setKey($this->query->getRussianDollKey())
                 ->fetch();
-            if (!empty($data)) {
+            if ($data === self::EMPTY_VALUE) {
+                $this->saveIdentityMap($data);
+                $this->response = (new RepositoryResponseFactory())->createEmptyResponse();
+                return $this;
+            }
+            if ($this->hasNonEmptyData($data)) {
                 $this->saveIdentityMap($data);
                 $this->response = (new RepositoryResponseFactory())->createFromArray(new Dictionary($data));
             }
@@ -95,11 +106,13 @@ class ReadRepository
             $rawData = $this->query->hasCustomQuery()
                 ? $dataMapper->query($this->query->getCustomQuery())
                 : $dataMapper->find($this->query->getIdentity());
-
             $response = (new RepositoryResponseFactory())->create($rawData);
 
-            if ($response->hasData() && $saveToCache) {
-                $data = (new RepositoryResponseFormatter($response))->format();
+            if ($saveToCache) {
+                $data = self::EMPTY_VALUE;
+                if ($response->hasData()) {
+                    $data = (new RepositoryResponseFormatter($response))->format();
+                }
                 $this
                     ->saveRussianDoll($data)
                     ->saveIdentityMap($data);
@@ -129,5 +142,10 @@ class ReadRepository
                 ->write($data);
         }
         return $this;
+    }
+
+    private function hasNonEmptyData($data)
+    {
+        return !empty($data) && is_array($data);
     }
 }
