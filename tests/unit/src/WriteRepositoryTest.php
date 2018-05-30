@@ -7,16 +7,30 @@ use G4\DataMapper\Common\MappingInterface;
 class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storageContainerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $repositoryCommandMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $identityMapMock;
+
+
     public function testDelete()
     {
-        $command = $this->getCommandMock();
-        $command->expects($this->exactly(1))->method('isDelete')->willReturn(true);
-        $command->expects($this->exactly(1))->method('getIdentity')->willReturn($this->getIdentityMock());
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('isDelete')->willReturn(true);
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('getIdentity')->willReturn($this->getIdentityMock());
 
-        $storage = $this->getStorageMock();
-        $storage->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
 
-        $this->assertEquals(null, (new WriteRepository($storage))->write($command));
+        $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
 
     public function testUpsert()
@@ -25,14 +39,12 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $mapperCollectionMock->expects($this->exactly(1))->method('rewind')->willReturn($mapperCollectionMock);
         $mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->getMappingMock());
 
-        $command = $this->getCommandMock();
-        $command->expects($this->exactly(1))->method('isUpsert')->willReturn(true);
-        $command->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('isUpsert')->willReturn(true);
+        $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
 
-        $storage = $this->getStorageMock();
-        $storage->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
 
-        $this->assertEquals(null, (new WriteRepository($storage))->write($command));
+        $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
 
     public function testInsert()
@@ -42,14 +54,12 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $mapperCollectionMock->expects($this->exactly(1))->method('rewind')->willReturn($mapperCollectionMock);
         $mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->getMappingMock());
 
-        $command = $this->getCommandMock();
-        $command->expects($this->exactly(1))->method('isInsert')->willReturn(true);
-        $command->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('isInsert')->willReturn(true);
+        $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
 
-        $storage = $this->getStorageMock();
-        $storage->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
 
-        $this->assertEquals(null, (new WriteRepository($storage))->write($command));
+        $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
 
     public function testInsertBulk()
@@ -57,27 +67,23 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $mapperCollectionMock = $this->getMapperCollectionMock();
         $mapperCollectionMock->expects($this->exactly(1))->method('count')->willReturn(3);
 
-        $command = $this->getCommandMock();
-        $command->expects($this->exactly(1))->method('isInsert')->willReturn(true);
-        $command->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('isInsert')->willReturn(true);
+        $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
 
-        $storage = $this->getStorageMock();
-        $storage->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
-        $storage->expects($this->exactly(0))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
+        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapper')->willReturn($this->getDataMapperMock());
 
-        $this->assertEquals(null, (new WriteRepository($storage))->write($command));
+        $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
 
     public function testCustomCommand()
     {
-        $command = $this->getCommandMock();
-        $command->expects($this->exactly(1))->method('isCustomCommand')->willReturn(true);
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('isCustomCommand')->willReturn(true);
 
-        $storage = $this->getStorageMock();
-        $storage->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
-        $storage->expects($this->exactly(0))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
 
-        $this->assertEquals(null, (new WriteRepository($storage))->write($command));
+        $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
 
     public function testUpdate()
@@ -86,15 +92,13 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $mapperCollectionMock->expects($this->exactly(1))->method('rewind')->willReturn($mapperCollectionMock);
         $mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->getMappingMock());
 
-        $command = $this->getCommandMock();
-        $command->expects($this->exactly(1))->method('isUpdate')->willReturn(true);
-        $command->expects($this->exactly(1))->method('getMap')->willReturn($mapperCollectionMock);
-        $command->expects($this->exactly(1))->method('getIdentity')->willReturn($this->getIdentityMock());
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('isUpdate')->willReturn(true);
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('getMap')->willReturn($mapperCollectionMock);
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('getIdentity')->willReturn($this->getIdentityMock());
 
-        $storage = $this->getStorageMock();
-        $storage->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
 
-        $this->assertEquals(null, (new WriteRepository($storage))->write($command));
+        $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
 
     public function testUpsertBulk()
@@ -102,40 +106,39 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $mapperCollectionMock = $this->getMapperCollectionMock();
         $mapperCollectionMock->expects($this->exactly(1))->method('count')->willReturn(2);
 
-        $command = $this->getCommandMock();
-        $command->expects($this->exactly(1))->method('isUpsert')->willReturn(true);
-        $command->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('isUpsert')->willReturn(true);
+        $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
 
-        $storage = $this->getStorageMock();
-        $storage->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
 
-        $this->assertEquals(null, (new WriteRepository($storage))->write($command));
+        $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
 
-    private function getStorageMock()
+    protected function setUp()
     {
-        $storage = $this->getMockBuilder(\G4\DataRepository\StorageContainer::class)
+        $this->storageContainerMock = $this->getMockBuilder(\G4\DataRepository\StorageContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storage->method('hasRussianDoll')->willReturn(true);
-        $storage->method('hasDataMapper')->willReturn(true);
-        $storage->method('hasIdentityMap')->willReturn(true);
-        $storage->method('hasDatasetName')->willReturn(true);
-        $storage->method('getRussianDoll')->willReturn($this->getRussianDollMock());
-        $storage->method('getIdentityMap')->willReturn($this->getIdentityMapMock());
+        $this->storageContainerMock->method('hasRussianDoll')->willReturn(true);
+        $this->storageContainerMock->method('hasDataMapper')->willReturn(true);
+        $this->storageContainerMock->method('hasIdentityMap')->willReturn(true);
+        $this->storageContainerMock->method('hasDatasetName')->willReturn(true);
+        $this->storageContainerMock->method('getRussianDoll')->willReturn($this->getRussianDollMock());
+        $this->storageContainerMock->method('getIdentityMap')->willReturn($this->getIdentityMapMock());
 
-        return $storage;
-    }
-
-    private function getCommandMock()
-    {
-        $command =  $this->getMockBuilder(\G4\DataRepository\RepositoryCommand::class)
+        $this->repositoryCommandMock = $this->getMockBuilder(\G4\DataRepository\RepositoryCommand::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $command->method('getRussianDollKey')->willReturn($this->getRussianDollKeyMock());
-        $command->method('getIdentityMapKey')->willReturn('key');
-        return $command;
+
+        $this->repositoryCommandMock->method('getRussianDollKey')->willReturn($this->getRussianDollKeyMock());
+        $this->repositoryCommandMock->method('getIdentityMapKey')->willReturn('key');
+    }
+
+    protected function tearDown()
+    {
+        $this->storageContainerMock     = null;
+        $this->repositoryCommandMock    = null;
     }
 
     private function getIdentityMapMock()
