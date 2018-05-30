@@ -22,11 +22,16 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $identityMapMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $identityInterfaceMock;
+
 
     public function testDelete()
     {
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isDelete')->willReturn(true);
-        $this->repositoryCommandMock->expects($this->exactly(1))->method('getIdentity')->willReturn($this->getIdentityMock());
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('getIdentity')->willReturn($this->identityInterfaceMock);
 
         $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
 
@@ -94,7 +99,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isUpdate')->willReturn(true);
         $this->repositoryCommandMock->expects($this->exactly(1))->method('getMap')->willReturn($mapperCollectionMock);
-        $this->repositoryCommandMock->expects($this->exactly(1))->method('getIdentity')->willReturn($this->getIdentityMock());
+        $this->repositoryCommandMock->expects($this->exactly(1))->method('getIdentity')->willReturn($this->identityInterfaceMock);
 
         $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->getDataMapperMock());
 
@@ -137,6 +142,10 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->repositoryCommandMock->method('getRussianDollKey')->willReturn($this->getRussianDollKeyMock());
         $this->repositoryCommandMock->method('getIdentityMapKey')->willReturn('key');
+
+        $this->identityInterfaceMock = $this->getMockBuilder(\G4\DataMapper\Common\IdentityInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function tearDown()
@@ -144,13 +153,6 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storageContainerMock     = null;
         $this->repositoryCommandMock    = null;
         $this->identityMapMock          = null;
-    }
-
-    private function getIdentityMock()
-    {
-        return $this->getMockBuilder(\G4\DataMapper\Common\IdentityInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 
     private function getRussianDollMock()
