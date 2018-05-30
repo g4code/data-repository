@@ -27,6 +27,11 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $identityInterfaceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $russianDollMock;
+
 
     public function testDelete()
     {
@@ -125,6 +130,11 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->russianDollMock = $this->getMockBuilder(\G4\RussianDoll\RussianDoll::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->russianDollMock->method('setKey')->willReturnSelf();
+
         $this->storageContainerMock = $this->getMockBuilder(\G4\DataRepository\StorageContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -133,7 +143,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storageContainerMock->method('hasDataMapper')->willReturn(true);
         $this->storageContainerMock->method('hasIdentityMap')->willReturn(true);
         $this->storageContainerMock->method('hasDatasetName')->willReturn(true);
-        $this->storageContainerMock->method('getRussianDoll')->willReturn($this->getRussianDollMock());
+        $this->storageContainerMock->method('getRussianDoll')->willReturn($this->russianDollMock);
         $this->storageContainerMock->method('getIdentityMap')->willReturn($this->identityMapMock);
 
         $this->repositoryCommandMock = $this->getMockBuilder(\G4\DataRepository\RepositoryCommand::class)
@@ -153,15 +163,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storageContainerMock     = null;
         $this->repositoryCommandMock    = null;
         $this->identityMapMock          = null;
-    }
-
-    private function getRussianDollMock()
-    {
-        $mock = $this->getMockBuilder(\G4\RussianDoll\RussianDoll::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mock->method('setKey')->willReturn($mock);
-        return $mock;
+        $this->russianDollMock          = null;
     }
 
     private function getRussianDollKeyMock()
