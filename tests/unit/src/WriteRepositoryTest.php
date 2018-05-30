@@ -32,6 +32,11 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $russianDollMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $russianDollKeyMock;
+
 
     public function testDelete()
     {
@@ -146,11 +151,15 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storageContainerMock->method('getRussianDoll')->willReturn($this->russianDollMock);
         $this->storageContainerMock->method('getIdentityMap')->willReturn($this->identityMapMock);
 
+        $this->russianDollKeyMock = $this->getMockBuilder(\G4\RussianDoll\Key::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->repositoryCommandMock = $this->getMockBuilder(\G4\DataRepository\RepositoryCommand::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->repositoryCommandMock->method('getRussianDollKey')->willReturn($this->getRussianDollKeyMock());
+        $this->repositoryCommandMock->method('getRussianDollKey')->willReturn($this->russianDollKeyMock);
         $this->repositoryCommandMock->method('getIdentityMapKey')->willReturn('key');
 
         $this->identityInterfaceMock = $this->getMockBuilder(\G4\DataMapper\Common\IdentityInterface::class)
@@ -164,13 +173,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repositoryCommandMock    = null;
         $this->identityMapMock          = null;
         $this->russianDollMock          = null;
-    }
-
-    private function getRussianDollKeyMock()
-    {
-        return $this->getMockBuilder(\G4\RussianDoll\Key::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->russianDollKeyMock       = null;
     }
 
     private function getDataMapperMock()
