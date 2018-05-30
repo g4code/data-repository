@@ -116,6 +116,10 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->identityMapMock = $this->getMockBuilder(\G4\IdentityMap\IdentityMap::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->storageContainerMock = $this->getMockBuilder(\G4\DataRepository\StorageContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -125,7 +129,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storageContainerMock->method('hasIdentityMap')->willReturn(true);
         $this->storageContainerMock->method('hasDatasetName')->willReturn(true);
         $this->storageContainerMock->method('getRussianDoll')->willReturn($this->getRussianDollMock());
-        $this->storageContainerMock->method('getIdentityMap')->willReturn($this->getIdentityMapMock());
+        $this->storageContainerMock->method('getIdentityMap')->willReturn($this->identityMapMock);
 
         $this->repositoryCommandMock = $this->getMockBuilder(\G4\DataRepository\RepositoryCommand::class)
             ->disableOriginalConstructor()
@@ -139,15 +143,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->storageContainerMock     = null;
         $this->repositoryCommandMock    = null;
-    }
-
-    private function getIdentityMapMock()
-    {
-        $mock = $this->getMockBuilder(\G4\IdentityMap\IdentityMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
+        $this->identityMapMock          = null;
     }
 
     private function getIdentityMock()
