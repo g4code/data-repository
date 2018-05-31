@@ -52,6 +52,11 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $mapperCollectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mappingInterfaceMock;
+
 
     public function testDelete()
     {
@@ -66,7 +71,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testUpsert()
     {
         $this->mapperCollectionMock->expects($this->exactly(1))->method('rewind')->willReturnSelf();
-        $this->mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->getMappingMock());
+        $this->mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->mappingInterfaceMock);
 
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isUpsert')->willReturn(true);
         $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($this->mapperCollectionMock);
@@ -80,7 +85,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->mapperCollectionMock->expects($this->exactly(1))->method('count')->willReturn(1);
         $this->mapperCollectionMock->expects($this->exactly(1))->method('rewind')->willReturnSelf();
-        $this->mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->getMappingMock());
+        $this->mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->mappingInterfaceMock);
 
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isInsert')->willReturn(true);
         $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($this->mapperCollectionMock);
@@ -116,7 +121,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $this->mapperCollectionMock->expects($this->exactly(1))->method('rewind')->willReturnSelf();
-        $this->mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->getMappingMock());
+        $this->mapperCollectionMock->expects($this->exactly(1))->method('current')->willReturn($this->mappingInterfaceMock);
 
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isUpdate')->willReturn(true);
         $this->repositoryCommandMock->expects($this->exactly(1))->method('getMap')->willReturn($this->mapperCollectionMock);
@@ -187,6 +192,10 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mapperCollectionMock = $this->getMockBuilder(MapperCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->mappingInterfaceMock = $this->getMockBuilder(MappingInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function tearDown()
@@ -199,12 +208,6 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mapperInterfaceMock      = null;
         $this->mapperBulkMock           = null;
         $this->mapperCollectionMock     = null;
-    }
-
-    private function getMappingMock()
-    {
-        return $this->getMockBuilder(MappingInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mappingInterfaceMock     = null;
     }
 }
