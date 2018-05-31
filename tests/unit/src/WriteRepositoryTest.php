@@ -42,6 +42,11 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $mapperInterfaceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mapperBulkMock;
+
 
     public function testDelete()
     {
@@ -90,7 +95,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isInsert')->willReturn(true);
         $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
 
-        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->mapperBulkMock);
         $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapper')->willReturn($this->mapperInterfaceMock);
 
         $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
@@ -101,7 +106,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isCustomCommand')->willReturn(true);
 
         $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapper')->willReturn($this->mapperInterfaceMock);
-        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
+        $this->storageContainerMock->expects($this->exactly(0))->method('getDataMapperBulk')->willReturn($this->mapperBulkMock);
 
         $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
@@ -129,7 +134,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isUpsert')->willReturn(true);
         $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($mapperCollectionMock);
 
-        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->getDataMapperBulkMock());
+        $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->mapperBulkMock);
 
         $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
@@ -174,6 +179,10 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mapperInterfaceMock = $this->getMockBuilder(\G4\DataMapper\Common\MapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->mapperBulkMock = $this->getMockBuilder(\G4\DataMapper\Common\Bulk::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function tearDown()
@@ -184,13 +193,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->russianDollMock          = null;
         $this->russianDollKeyMock       = null;
         $this->mapperInterfaceMock      = null;
-    }
-
-    private function getDataMapperBulkMock()
-    {
-        return $this->getMockBuilder(\G4\DataMapper\Common\Bulk::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mapperBulkMock           = null;
     }
 
     private function getMapperCollectionMock()
