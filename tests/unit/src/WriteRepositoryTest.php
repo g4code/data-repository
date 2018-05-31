@@ -134,12 +134,16 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpsertBulk()
     {
-        $this->mapperCollectionMock->expects($this->exactly(1))->method('count')->willReturn(2);
+        $this->mapperCollectionMock->expects($this->once())->method('count')->willReturn(2);
+        $this->mapperCollectionMock->expects($this->exactly(3))->method('valid')->willReturnOnConsecutiveCalls(true, true, false);
+        $this->mapperCollectionMock->expects($this->exactly(2))->method('current')->willReturn($this->mappingInterfaceMock);
 
         $this->repositoryCommandMock->expects($this->exactly(1))->method('isUpsert')->willReturn(true);
         $this->repositoryCommandMock->expects($this->exactly(2))->method('getMap')->willReturn($this->mapperCollectionMock);
 
         $this->storageContainerMock->expects($this->exactly(1))->method('getDataMapperBulk')->willReturn($this->mapperBulkMock);
+
+        $this->mapperBulkMock->expects($this->exactly(2))->method('add')->with($this->mappingInterfaceMock);
 
         $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
