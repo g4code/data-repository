@@ -164,6 +164,14 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $repository->delete());
     }
 
+    public function testSimpleQuery()
+    {
+        $query = 'Select * from table';
+
+        $repository = new DataRepository($this->storageContainerMock);
+        $this->assertInstanceOf(\G4\DataRepository\SimpleDataRepositoryResponse::class, $repository->simpleQuery($query));
+    }
+
     private function getMappingMock()
     {
         return  $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)

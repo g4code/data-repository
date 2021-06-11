@@ -6,6 +6,13 @@ use G4\ValueObject\Dictionary;
 
 class RepositoryResponseFactory
 {
+    public function createSimple(\G4\DataMapper\Common\SimpleRawData $rawData)
+    {
+        return new SimpleDataRepositoryResponse(
+            $rawData->getAll(),
+            $rawData->count()
+        );
+    }
 
     public function create(\G4\DataMapper\Common\RawData $rawData)
     {
@@ -28,5 +35,10 @@ class RepositoryResponseFactory
     public function createEmptyResponse()
     {
         return new DataRepositoryResponse([], 0, 0);
+    }
+
+    public function createSimpleEmptyResponse()
+    {
+        return new SimpleDataRepositoryResponse([], 0);
     }
 }

@@ -2,6 +2,7 @@
 
 use G4\DataRepository\RepositoryResponseFactory;
 use G4\DataRepository\DataRepositoryResponse;
+use G4\DataRepository\SimpleDataRepositoryResponse;
 
 class DataRepositoryResponseFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,6 +32,16 @@ class DataRepositoryResponseFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DataRepositoryResponse::class, $responseFactory->createFromArray($data));
     }
 
+    public function testCreateSimple()
+    {
+        $responseFactory = new RepositoryResponseFactory();
+        $rawData = $this->getMockBuilder(\G4\DataMapper\Common\SimpleRawData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
+        $rawData->expects($this->once())->method('getAll')->willReturn(['key' => 'value']);
+        $rawData->expects($this->once())->method('count')->willReturn(1);
 
+        $this->assertInstanceOf(SimpleDataRepositoryResponse::class, $responseFactory->createSimple($rawData));
+    }
 }
