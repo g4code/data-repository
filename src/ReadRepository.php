@@ -14,8 +14,8 @@ class ReadRepository
      */
     private $storageContainer;
 
-    /*
-     * @return DataRepositoryResponse
+    /**
+     * @var SimpleRepositoryDataResponse|DataRepositoryResponse
      */
     private $response;
 
@@ -49,6 +49,27 @@ class ReadRepository
         return $this
             ->readFromDataMapper(false)
             ->getResponse();
+    }
+
+    public function simpleQuery(RepositoryQuery $query)
+    {
+        $this->query = $query;
+
+        return $this
+            ->execSimpleQuery()
+            ->getSimpleResponse();
+    }
+
+    private function getSimpleResponse()
+    {
+        return $this->hasSimpleResponse()
+            ? $this->response
+            : (new RepositoryResponseFactory())->createSimpleEmptyResponse();
+    }
+
+    private function hasSimpleResponse()
+    {
+        return $this->response instanceof SimpleDataRepositoryResponse;
     }
 
     private function getResponse()
@@ -119,6 +140,19 @@ class ReadRepository
             }
             $this->response = $response;
         }
+        return $this;
+    }
+
+    private function execSimpleQuery()
+    {
+        if ($this->storageContainer->hasDataMapper() && !$this->hasSimpleResponse() && $this->query->hasCustomQuery()) {
+            $dataMapper = $this->storageContainer->getDataMapper();
+
+            $rawData = $dataMapper->simpleQuery($this->query->getCustomQuery());
+
+            $this->response = $rawData ? (new RepositoryResponseFactory())->createSimple($rawData) : null;
+        }
+        
         return $this;
     }
 

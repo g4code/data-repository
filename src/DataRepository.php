@@ -112,6 +112,14 @@ class DataRepository
         return (new ReadRepository($this->storageContainer))->readNoCache($query);
     }
 
+    public function simpleQuery($customQuery)
+    {
+        $query = new RepositoryQuery();
+        $query->setCustomQuery($customQuery);
+
+        return (new ReadRepository($this->storageContainer))->simpleQuery($query);
+    }
+
     public function command($customCommand)
     {
         $command = $this->getCommand();
