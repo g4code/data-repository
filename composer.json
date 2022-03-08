@@ -41,7 +41,7 @@
         "php"               : ">=5.6",
         "g4/russian-doll"   : ">=0.4.5",
         "g4/identity-map"   : "1.*",
-        "g4/data-mapper"    : "1.66.*"
+        "g4/data-mapper"    : ">=1.70.0"
     },
     "scripts": {
         "unit-test": [
