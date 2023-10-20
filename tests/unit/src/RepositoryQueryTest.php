@@ -4,7 +4,7 @@ use G4\DataRepository\RepositoryQuery;
 use \G4\DataMapper\Common\IdentityInterface;
 use \G4\RussianDoll\Key;
 
-class RepositoryQueryTest extends \PHPUnit_Framework_TestCase
+class RepositoryQueryTest extends \PHPUnit\Framework\TestCase
 {
     const IDENTITY_MAP_KEY = 'some_key';
 
@@ -15,12 +15,12 @@ class RepositoryQueryTest extends \PHPUnit_Framework_TestCase
      */
     private $query;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->query = new RepositoryQuery();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->query = null;
     }

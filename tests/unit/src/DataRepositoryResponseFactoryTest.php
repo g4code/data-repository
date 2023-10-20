@@ -4,7 +4,7 @@ use G4\DataRepository\RepositoryResponseFactory;
 use G4\DataRepository\DataRepositoryResponse;
 use G4\DataRepository\SimpleDataRepositoryResponse;
 
-class DataRepositoryResponseFactoryTest extends \PHPUnit_Framework_TestCase
+class DataRepositoryResponseFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testCreate()

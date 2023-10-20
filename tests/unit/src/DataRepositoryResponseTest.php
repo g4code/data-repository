@@ -2,7 +2,7 @@
 
 use G4\DataRepository\DataRepositoryResponse;
 
-class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
+class DataRepositoryResponseTest extends \PHPUnit\Framework\TestCase
 {
     private $data;
 
@@ -11,7 +11,7 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
      */
     private $response;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->data = [
             [
@@ -29,7 +29,7 @@ class DataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
         $this->response = new DataRepositoryResponse($this->data, 2, 4);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->data     = null;
         $this->response = null;

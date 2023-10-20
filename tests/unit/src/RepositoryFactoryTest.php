@@ -6,7 +6,7 @@ use G4\DataRepository\StorageContainer;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Builder;
 
-class RepositoryFactoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     private $mapperBuilderStub;

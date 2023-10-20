@@ -3,7 +3,7 @@
 use G4\DataRepository\RepositoryResponseFormatter;
 use G4\DataRepository\DataRepositoryResponse;
 
-class RepositoryResponseFormatterTest extends \PHPUnit_Framework_TestCase
+class RepositoryResponseFormatterTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testFormat()

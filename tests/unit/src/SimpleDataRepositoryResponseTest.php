@@ -2,13 +2,13 @@
 
 use G4\DataRepository\SimpleDataRepositoryResponse;
 
-class SimpleDataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
+class SimpleDataRepositoryResponseTest extends \PHPUnit\Framework\TestCase
 {
     private $data;
 
     private $response;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->data = [
             [
@@ -26,7 +26,7 @@ class SimpleDataRepositoryResponseTest extends \PHPUnit_Framework_TestCase
         $this->response = new SimpleDataRepositoryResponse($this->data, 2);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->data     = null;
         $this->response = null;
