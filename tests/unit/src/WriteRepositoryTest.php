@@ -4,7 +4,7 @@ use G4\DataRepository\WriteRepository;
 use G4\DataRepository\MapperCollection;
 use G4\DataMapper\Common\MappingInterface;
 
-class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
+class WriteRepositoryTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -148,7 +148,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, (new WriteRepository($this->storageContainerMock))->write($this->repositoryCommandMock));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identityMapMock = $this->getMockBuilder(\G4\IdentityMap\IdentityMap::class)
             ->disableOriginalConstructor()
@@ -202,7 +202,7 @@ class WriteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->storageContainerMock     = null;
         $this->repositoryCommandMock    = null;

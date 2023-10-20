@@ -4,7 +4,7 @@ use G4\DataRepository\DataRepositoryResponse;
 use G4\DataRepository\ReadRepository;
 use G4\DataMapper\Common\MappingInterface;
 
-class ReadRepositoryTest extends \PHPUnit_Framework_TestCase
+class ReadRepositoryTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testReadEmpty()
