@@ -71,7 +71,8 @@ class WriteRepository
 
                 $mapper->upsert();
             } else {
-                $map = $command->getMap()->rewind();
+                $map = $command->getMap();
+                $map->rewind();
                 $this
                     ->storageContainer
                     ->getDataMapper()
@@ -88,13 +89,15 @@ class WriteRepository
 
                 $mapper->insert();
             } else {
-                $map = $command->getMap()->rewind();
+                $map = $command->getMap();
+                $map->rewind();
                 $this->storageContainer->getDataMapper()->insert($map->current());
             }
         }
 
         if ($command->isUpdate()) {
-            $map = $command->getMap()->rewind();
+            $map = $command->getMap();
+            $map->rewind();
             $this
                 ->storageContainer
                 ->getDataMapper()
