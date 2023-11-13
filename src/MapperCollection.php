@@ -39,7 +39,7 @@ class MapperCollection implements \Iterator, \Countable
      * Count elements of an object
      * @return int The custom count as an integer.
      */
-    public function count()
+    public function count(): int
     {
         if ($this->total === null) {
             $this->total = count($this->rawData);
@@ -50,7 +50,7 @@ class MapperCollection implements \Iterator, \Countable
     /**
      * @return mixed|null
      */
-    public function current()
+    public function current(): mixed
     {
         if ($this->pointer >= $this->count()) {
             return null;
@@ -64,7 +64,7 @@ class MapperCollection implements \Iterator, \Countable
     /**
      * Move forward to next element
      */
-    public function next()
+    public function next(): void
     {
         if ($this->pointer < $this->count()) {
             $this->pointer++;
@@ -75,7 +75,7 @@ class MapperCollection implements \Iterator, \Countable
      * Return the key of the current element
      * @return int
      */
-    public function key()
+    public function key(): mixed
     {
         return $this->pointer;
     }
@@ -84,7 +84,7 @@ class MapperCollection implements \Iterator, \Countable
      * Checks if current position is valid
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->current() !== null;
     }
@@ -93,10 +93,9 @@ class MapperCollection implements \Iterator, \Countable
      * Rewind the Iterator to the first element
      * @return $this
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->pointer = 0;
-        return $this;
     }
 
     /**
