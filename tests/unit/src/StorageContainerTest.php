@@ -11,7 +11,7 @@ use G4\DataRepository\Exception\MissingStorageException;
 use G4\DataRepository\Exception\NotValidStorageException;
 use G4\DataRepository\Exception\MissingDatasetNameValueException;
 
-class StorageContainerTest extends PHPUnit_Framework_TestCase
+class StorageContainerTest extends \PHPUnit\Framework\TestCase
 {
 
     private $identityMapStub;
@@ -20,7 +20,7 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
     private $mapperStubBulk;
     private $mapperBuilderStub;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->identityMapStub = $this->getMockBuilder(IdentityMap::class)
             ->disableOriginalConstructor()
@@ -55,7 +55,7 @@ class StorageContainerTest extends PHPUnit_Framework_TestCase
             ->willReturn($this->mapperStubBulk);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->identityMapStub      = null;
         $this->russianDollStub      = null;

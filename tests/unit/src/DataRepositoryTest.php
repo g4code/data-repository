@@ -2,13 +2,13 @@
 
 use G4\DataRepository\DataRepository;
 
-class DataRepositoryTest extends \PHPUnit_Framework_TestCase
+class DataRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     const TABLE_NAME = '__TABLE_NAME__';
 
     private $storageContainerMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->storageContainerMock = $this->getMockBuilder(\G4\DataRepository\StorageContainer::class)
             ->disableOriginalConstructor()
@@ -52,7 +52,7 @@ class DataRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $repository = new DataRepository($this->storageContainerMock);
         $this->assertInstanceOf(DataRepository::class, $repository->setIdentityMapKey(self::TABLE_NAME));
-        $this->assertInternalType('string', $repository->getIdentityMapKey());
+        $this->assertIsString($repository->getIdentityMapKey());
         $this->assertEquals(self::TABLE_NAME, $repository->getIdentityMapKey());
         $this->assertNotNull($repository->getIdentityMapKey());
     }

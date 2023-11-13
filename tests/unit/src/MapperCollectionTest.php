@@ -2,7 +2,7 @@
 
 use G4\DataRepository\MapperCollection;
 
-class MapperCollectionTest extends \PHPUnit_Framework_TestCase
+class MapperCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MapperCollection
@@ -14,7 +14,7 @@ class MapperCollectionTest extends \PHPUnit_Framework_TestCase
      */
     private $data;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->data = [
             0 => 'first_mapping',
@@ -23,7 +23,7 @@ class MapperCollectionTest extends \PHPUnit_Framework_TestCase
         $this->collection = new MapperCollection($this->data);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->data       = null;
         $this->collection = null;

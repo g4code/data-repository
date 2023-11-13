@@ -6,7 +6,7 @@ use G4\DataRepository\RepositoryCommand;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\IdentityInterface;
 
-class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
+class RepositoryCommandTest extends \PHPUnit\Framework\TestCase
 {
     const IDENTITY_MAP_KEY = 'some_key';
 
@@ -16,12 +16,12 @@ class RepositoryCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->command = new RepositoryCommand();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->command = null;
     }
