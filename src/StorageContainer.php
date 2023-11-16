@@ -15,10 +15,7 @@ use G4\DataRepository\Exception\MissingDatasetNameValueException;
 class StorageContainer
 {
 
-    /**
-     * @var IdentityMap
-     */
-    private $identityMap;
+    private ?\G4\IdentityMap\IdentityMap $identityMap = null;
 
     /**
      * @var MapperInterface
@@ -30,21 +27,17 @@ class StorageContainer
      */
     private $dataMapperBulk;
 
-    /**
-     * @var RussianDoll
-     */
-    private $russianDoll;
+    private ?\G4\RussianDoll\RussianDoll $russianDoll = null;
 
     /*
      * @var Builder
      */
-    private $dataMapperBuilder;
+    private ?\G4\DataMapper\Builder $dataMapperBuilder = null;
 
     private $datasetName;
 
     /**
      * StorageContainer constructor.
-     * @param array $storages
      * @throws MissingStorageException
      */
     public function __construct(array $storages)
@@ -57,19 +50,15 @@ class StorageContainer
         }
     }
 
-    /**
-     * @return IdentityMap
-     */
-    public function getIdentityMap()
+    public function getIdentityMap(): ?IdentityMap
     {
         return $this->identityMap;
     }
 
     /**
-     * @return MapperInterface
      * @throws MissingDatasetNameValueException
      */
-    public function getDataMapper()
+    public function getDataMapper(): MapperInterface
     {
         if (!$this->dataMapper instanceof MapperInterface) {
             if ($this->datasetName === null) {
@@ -86,7 +75,7 @@ class StorageContainer
      * @return Bulk
      * @throws MissingDatasetNameValueException
      */
-    public function getDataMapperBulk()
+    public function getDataMapperBulk(): Bulk
     {
         if (!$this->dataMapperBulk instanceof Bulk) {
             if ($this->datasetName === null) {
@@ -99,77 +88,51 @@ class StorageContainer
         return $this->dataMapperBulk;
     }
 
-    /**
-     * @param $datasetName
-     * @return $this
-     */
-    public function setDatasetName($datasetName)
+    public function setDatasetName(string $datasetName)
     {
         $this->datasetName = $datasetName;
         return $this;
     }
 
-    /**
-     * @return RussianDoll
-     */
-    public function getRussianDoll()
+    public function getRussianDoll(): ?RussianDoll
     {
         return $this->russianDoll;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasIdentityMap()
+    public function hasIdentityMap(): bool
     {
         return $this->identityMap instanceof IdentityMap;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasDataMapper()
+    public function hasDataMapper(): bool
     {
         return $this->getDataMapper() instanceof MapperInterface;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasDataMapperBulk()
+    public function hasDataMapperBulk(): bool
     {
         return $this->getDataMapperBulk() instanceof Bulk;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasDatasetName()
+    public function hasDatasetName(): bool
     {
         return $this->datasetName !== null;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasDataMapperBuilder()
+    public function hasDataMapperBuilder(): bool
     {
         return $this->dataMapperBuilder instanceof Builder;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasRussianDoll()
+    public function hasRussianDoll(): bool
     {
         return $this->russianDoll instanceof RussianDoll;
     }
 
     /**
-     * @param mixed $aStorage
      * @throws NotValidStorageException
      */
-    private function addStorage($aStorage)
+    private function addStorage(mixed $aStorage): void
     {
         if ($aStorage instanceof IdentityMap) {
             $this->identityMap = $aStorage;
@@ -187,20 +150,14 @@ class StorageContainer
         throw new NotValidStorageException();
     }
 
-    /**
-     * @return MapperInterface
-     */
-    private function makeDataMapper()
+    private function makeDataMapper(): MapperInterface
     {
         return $this->dataMapperBuilder
             ->collectionName(new MySQLTableName($this->datasetName))
             ->buildMapper();
     }
 
-    /**
-     * @return Bulk
-     */
-    private function makeDataMapperBulk()
+    private function makeDataMapperBulk(): Bulk
     {
         return $this->dataMapperBuilder
             ->collectionName(new MySQLTableName($this->datasetName))

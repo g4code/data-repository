@@ -7,21 +7,16 @@ use G4\DataRepository\Exception\MissingResponseOneDataException;
 
 class SimpleDataRepositoryResponse
 {
-    private $data;
-    private $count;
-
-    public function __construct(array $currentItems, $count)
+    public function __construct(private readonly array $data, private $count)
     {
-        $this->data     = $currentItems;
-        $this->count    = $count;
     }
 
-    public function count()
+    public function count(): int
     {
         return $this->count;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         if (!$this->hasData()) {
             throw new MissingResponseAllDataException();
@@ -29,7 +24,10 @@ class SimpleDataRepositoryResponse
         return $this->data;
     }
 
-    public function getOne()
+    /**
+     * @throws MissingResponseOneDataException
+     */
+    public function getOne(): mixed
     {
         if (!$this->hasData()) {
             throw new MissingResponseOneDataException();
@@ -37,7 +35,7 @@ class SimpleDataRepositoryResponse
         return current($this->data);
     }
 
-    public function hasData()
+    public function hasData(): bool
     {
         return count($this->data) !== 0;
     }

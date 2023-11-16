@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class MissingActionException extends Exception
 {
 
-    const MESSAGE = 'Expected action (insert, upsert, update or delete).';
+    final public const MESSAGE = 'Expected action (insert, upsert, update or delete).';
 
     public function __construct()
     {

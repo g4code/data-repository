@@ -5,20 +5,13 @@ namespace G4\DataRepository;
 class WriteRepository
 {
     /**
-     * @var StorageContainer
-     */
-    private $storageContainer;
-
-    /**
      * Repository constructor.
-     * @param StorageContainer $storageContainer
      */
-    public function __construct(StorageContainer $storageContainer)
+    public function __construct(private readonly StorageContainer $storageContainer)
     {
-        $this->storageContainer = $storageContainer;
     }
 
-    public function write(RepositoryCommand $command)
+    public function write(RepositoryCommand $command): void
     {
         if ($this->storageContainer->hasDatasetName()) {
             $this->writeDataMapper($command);
@@ -35,7 +28,7 @@ class WriteRepository
         }
     }
 
-    private function invalidateRussianDoll(RepositoryCommand $command)
+    private function invalidateRussianDoll(RepositoryCommand $command): void
     {
         $this
             ->storageContainer
@@ -44,7 +37,7 @@ class WriteRepository
             ->expire();
     }
 
-    private function invalidateIdentityMap(RepositoryCommand $command)
+    private function invalidateIdentityMap(RepositoryCommand $command): void
     {
         $this
             ->storageContainer
@@ -53,7 +46,7 @@ class WriteRepository
     }
 
     // TODO Sinisa split each method into a new dedicated class
-    private function writeDataMapper(RepositoryCommand $command)
+    private function writeDataMapper(RepositoryCommand $command): void
     {
         if ($command->isDelete()) {
             $this

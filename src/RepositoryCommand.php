@@ -10,36 +10,30 @@ use G4\DataRepository\Exception\MissingMapperException;
 use G4\DataRepository\Exception\MissingRussianDollKeyException;
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MappingInterface;
+use G4\RussianDoll\Key;
 
 class RepositoryCommand
 {
-    const ACTION_UPSERT = 'upsert';
-    const ACTION_INSERT = 'insert';
-    const ACTION_DELETE = 'delete';
-    const ACTION_UPDATE = 'update';
-    const CUSTOM_COMMAND= 'custom_command';
-    const DELIMITER     = '|';
+    final public const ACTION_UPSERT = 'upsert';
+    final public const ACTION_INSERT = 'insert';
+    final public const ACTION_DELETE = 'delete';
+    final public const ACTION_UPDATE = 'update';
+    final public const CUSTOM_COMMAND= 'custom_command';
+    final public const DELIMITER     = '|';
 
-    /**
-     * @var MapperCollection
-     */
-    private $map;
-    private $russianDollKey;
-    private $identityMapKey;
+    private ?MapperCollection $map = null;
+    private ?Key $russianDollKey = null;
+    private ?string $identityMapKey = null;
     private $customCommand;
 
-    /**
-     * @var \G4\DataMapper\Common\IdentityInterface
-     */
-    private $identity;
+    private ?IdentityInterface $identity = null;
 
-    private $action;
+    private ?string $action = null;
 
     /**
-     * @return MapperCollection
      * @throws MissingMapperException
      */
-    public function getMap()
+    public function getMap(): ?MapperCollection
     {
         if (!$this->map instanceof MapperCollection) {
             throw new MissingMapperException();
@@ -48,26 +42,25 @@ class RepositoryCommand
     }
 
     /**
-     * @return IdentityInterface
      * @throws MissingIdentityException
      */
-    public function getIdentity()
+    public function getIdentity(): ?IdentityInterface
     {
-        if (!$this->identity instanceof \G4\DataMapper\Common\IdentityInterface) {
+        if (!$this->identity instanceof IdentityInterface) {
             throw new MissingIdentityException();
         }
         return $this->identity;
     }
 
-    public function getRussianDollKey()
+    public function getRussianDollKey(): ?Key
     {
-        if (!$this->russianDollKey instanceof \G4\RussianDoll\Key) {
+        if (!$this->russianDollKey instanceof Key) {
             throw new MissingRussianDollKeyException();
         }
         return $this->russianDollKey;
     }
 
-    public function getIdentityMapKey()
+    public function getIdentityMapKey(): ?string
     {
         if (empty($this->identityMapKey)) {
             throw new MissingIdentityMapKeyException();
@@ -75,19 +68,19 @@ class RepositoryCommand
         return $this->identityMapKey;
     }
 
-    public function setRussianDollKey(\G4\RussianDoll\Key $russianDollKey)
+    public function setRussianDollKey(Key $russianDollKey): self
     {
         $this->russianDollKey = $russianDollKey;
         return $this;
     }
 
-    public function setIdentityMapKey(...$identityMapKey)
+    public function setIdentityMapKey(...$identityMapKey): self
     {
         $this->identityMapKey = join(self::DELIMITER, $identityMapKey);
         return $this;
     }
 
-    public function update(MapperCollection $map, IdentityInterface $identity)
+    public function update(MapperCollection $map, IdentityInterface $identity): self
     {
         $this->map      = $map;
         $this->identity = $identity;
@@ -95,53 +88,53 @@ class RepositoryCommand
         return $this;
     }
 
-    public function upsert(MapperCollection $map)
+    public function upsert(MapperCollection $map): self
     {
         $this->map      = $map;
         $this->action   = self::ACTION_UPSERT;
         return $this;
     }
 
-    public function delete(\G4\DataMapper\Common\IdentityInterface $identity)
+    public function delete(IdentityInterface $identity): self
     {
         $this->identity = $identity;
         $this->action   = self::ACTION_DELETE;
         return $this;
     }
 
-    public function insert(MapperCollection $maps)
+    public function insert(MapperCollection $maps): self
     {
         $this->map = $maps;
         $this->action = self::ACTION_INSERT;
         return $this;
     }
 
-    public function isUpsert()
+    public function isUpsert(): bool
     {
         return $this->getAction() === self::ACTION_UPSERT;
     }
 
-    public function isInsert()
+    public function isInsert(): bool
     {
         return $this->getAction() === self::ACTION_INSERT;
     }
 
-    public function isUpdate()
+    public function isUpdate(): bool
     {
         return $this->getAction() === self::ACTION_UPDATE;
     }
 
-    public function isDelete()
+    public function isDelete(): bool
     {
         return $this->getAction() === self::ACTION_DELETE;
     }
 
-    public function isCustomCommand()
+    public function isCustomCommand(): bool
     {
         return $this->getAction() === self::CUSTOM_COMMAND;
     }
 
-    private function getAction()
+    private function getAction(): ?string
     {
         if ($this->action === self::ACTION_INSERT
             || $this->action === self::ACTION_DELETE
@@ -154,12 +147,12 @@ class RepositoryCommand
         throw new MissingActionException();
     }
 
-    public function hasCustomCommand()
+    public function hasCustomCommand(): bool
     {
         return !empty($this->customCommand);
     }
 
-    public function getCustomCommand()
+    public function getCustomCommand(): mixed
     {
         if (!$this->hasCustomCommand()) {
             throw new MissingCustomCommandException();
@@ -167,7 +160,7 @@ class RepositoryCommand
         return $this->customCommand;
     }
 
-    public function setCustomCommand($customCommand)
+    public function setCustomCommand($customCommand): self
     {
         $this->action = self::CUSTOM_COMMAND;
         $this->customCommand = $customCommand;

@@ -7,10 +7,7 @@ use G4\DataRepository\Exception\MissingStorageException;
 class DataRepositoryFactory
 {
 
-    /**
-     * @var array
-     */
-    private $storages;
+    private readonly array $storages;
 
     /**
      * RepositoryFactory constructor.
@@ -22,18 +19,12 @@ class DataRepositoryFactory
         $this->storages = $storages;
     }
 
-    /**
-     * @return DataRepository
-     */
-    public function create()
+    public function create(): DataRepository
     {
         return new DataRepository($this->makeStorageContainer());
     }
 
-    /**
-     * @return StorageContainer
-     */
-    public function makeStorageContainer()
+    public function makeStorageContainer(): StorageContainer
     {
         return new StorageContainer($this->storages);
     }
