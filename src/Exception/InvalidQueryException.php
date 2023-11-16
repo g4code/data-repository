@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class InvalidQueryException extends Exception
 {
 
-    const MESSAGE = 'Invalid query';
+    final public const MESSAGE = 'Invalid query';
 
     public function __construct()
     {

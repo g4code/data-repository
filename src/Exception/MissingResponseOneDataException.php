@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class MissingResponseOneDataException extends Exception
 {
 
-    const MESSAGE = 'Missing response one data';
+    final public const MESSAGE = 'Missing response one data';
 
     public function __construct()
     {

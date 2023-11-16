@@ -7,33 +7,23 @@ use G4\ValueObject\Dictionary;
 class ReadRepository
 {
 
-    const EMPTY_VALUE = 'EMPTY_VALUE';
+    final public const EMPTY_VALUE = 'EMPTY_VALUE';
 
     /**
-     * @var StorageContainer
-     */
-    private $storageContainer;
-
-    /**
-     * @var SimpleRepositoryDataResponse|DataRepositoryResponse
+     * @var SimpleDataRepositoryResponse|DataRepositoryResponse
      */
     private $response;
 
-    /*
-     * @return RepositoryQuery
-     */
-    private $query;
+    private ?RepositoryQuery $query = null;
 
     /**
      * Repository constructor.
-     * @param StorageContainer $storageContainer
      */
-    public function __construct(StorageContainer $storageContainer)
+    public function __construct(private readonly StorageContainer $storageContainer)
     {
-        $this->storageContainer = $storageContainer;
     }
 
-    public function read(RepositoryQuery $query)
+    public function read(RepositoryQuery $query): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         $this->query = $query;
         return $this
@@ -43,7 +33,7 @@ class ReadRepository
             ->getResponse();
     }
 
-    public function readNoCache(RepositoryQuery $query)
+    public function readNoCache(RepositoryQuery $query): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         $this->query = $query;
         return $this
@@ -51,7 +41,7 @@ class ReadRepository
             ->getResponse();
     }
 
-    public function simpleQuery(RepositoryQuery $query)
+    public function simpleQuery(RepositoryQuery $query): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         $this->query = $query;
 
@@ -60,31 +50,31 @@ class ReadRepository
             ->getSimpleResponse();
     }
 
-    private function getSimpleResponse()
+    private function getSimpleResponse(): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         return $this->hasSimpleResponse()
             ? $this->response
             : (new RepositoryResponseFactory())->createSimpleEmptyResponse();
     }
 
-    private function hasSimpleResponse()
+    private function hasSimpleResponse(): bool
     {
         return $this->response instanceof SimpleDataRepositoryResponse;
     }
 
-    private function getResponse()
+    private function getResponse(): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         return $this->hasResponse()
             ? $this->response
             : (new RepositoryResponseFactory())->createEmptyResponse();
     }
 
-    private function hasResponse()
+    private function hasResponse(): bool
     {
         return $this->response instanceof DataRepositoryResponse;
     }
 
-    private function readFromIdentityMap()
+    private function readFromIdentityMap(): self
     {
         if ($this->storageContainer->hasIdentityMap() && !$this->hasResponse()) {
             $data = $this->storageContainer->getIdentityMap()->get($this->query->getIdentityMapKey());
@@ -99,7 +89,7 @@ class ReadRepository
         return $this;
     }
 
-    private function readFromRussianDoll()
+    private function readFromRussianDoll(): self
     {
         if ($this->storageContainer->getRussianDoll() && !$this->hasResponse()) {
             $data = $this
@@ -120,7 +110,7 @@ class ReadRepository
         return $this;
     }
 
-    private function readFromDataMapper($saveToCache = true)
+    private function readFromDataMapper($saveToCache = true): self
     {
         if ($this->storageContainer->hasDataMapper() && !$this->hasResponse()) {
             $dataMapper = $this->storageContainer->getDataMapper();
@@ -143,7 +133,7 @@ class ReadRepository
         return $this;
     }
 
-    private function execSimpleQuery()
+    private function execSimpleQuery(): self
     {
         if ($this->storageContainer->hasDataMapper() && !$this->hasSimpleResponse() && $this->query->hasCustomQuery()) {
             $dataMapper = $this->storageContainer->getDataMapper();
@@ -152,11 +142,11 @@ class ReadRepository
 
             $this->response = $rawData ? (new RepositoryResponseFactory())->createSimple($rawData) : null;
         }
-        
+
         return $this;
     }
 
-    private function saveIdentityMap($data)
+    private function saveIdentityMap($data): self
     {
         if ($this->storageContainer->hasIdentityMap()) {
             $this
@@ -167,7 +157,7 @@ class ReadRepository
         return $this;
     }
 
-    private function saveRussianDoll($data)
+    private function saveRussianDoll($data): self
     {
         if ($this->storageContainer->hasRussianDoll()) {
             $this->storageContainer
@@ -178,7 +168,7 @@ class ReadRepository
         return $this;
     }
 
-    private function hasNonEmptyData($data)
+    private function hasNonEmptyData($data): bool
     {
         return !empty($data) && is_array($data);
     }

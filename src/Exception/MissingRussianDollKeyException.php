@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class MissingRussianDollKeyException extends Exception
 {
 
-    const MESSAGE = 'Missing russian doll key';
+    final public const MESSAGE = 'Missing russian doll key';
 
     public function __construct()
     {
