@@ -20,15 +20,11 @@ class StorageContainer
      */
     private $identityMap;
 
-    /**
-     * @var MapperInterface
-     */
-    private $dataMapper;
+    /** @var array<string, MapperInterface> */
+    private $dataMappers;
 
-    /**
-     * @var Bulk
-     */
-    private $dataMapperBulk;
+    /** @var array<string, Bulk> */
+    private $dataMappersBulk;
 
     /**
      * @var RussianDoll
@@ -55,6 +51,8 @@ class StorageContainer
         foreach ($storages as $aStorage) {
             $this->addStorage($aStorage);
         }
+
+        $this->dataMappers = [];
     }
 
     /**
@@ -71,15 +69,15 @@ class StorageContainer
      */
     public function getDataMapper()
     {
-        if (!$this->dataMapper instanceof MapperInterface) {
-            if ($this->datasetName === null) {
-                throw new MissingDatasetNameValueException();
-            }
-
-            $this->dataMapper = $this->makeDataMapper();
+        if ($this->datasetName === null) {
+            throw new MissingDatasetNameValueException();
         }
 
-        return $this->dataMapper;
+        if(!isset($this->dataMappers[$this->datasetName])) {
+            $this->dataMappers[$this->datasetName] = $this->makeDataMapper();
+        }
+
+        return $this->dataMappers[$this->datasetName];
     }
 
     /**
@@ -88,15 +86,15 @@ class StorageContainer
      */
     public function getDataMapperBulk()
     {
-        if (!$this->dataMapperBulk instanceof Bulk) {
-            if ($this->datasetName === null) {
-                throw new MissingDatasetNameValueException();
-            }
-
-            $this->dataMapperBulk = $this->makeDataMapperBulk();
+        if ($this->datasetName === null) {
+            throw new MissingDatasetNameValueException();
         }
 
-        return $this->dataMapperBulk;
+        if(!isset($this->dataMappersBulk[$this->datasetName])) {
+            $this->dataMappersBulk[$this->datasetName] = $this->makeDataMapperBulk();
+        }
+
+        return $this->dataMappersBulk[$this->datasetName];
     }
 
     /**
