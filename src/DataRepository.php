@@ -2,84 +2,63 @@
 
 namespace G4\DataRepository;
 
-use \G4\DataMapper\Common\MappingInterface;
+use G4\DataMapper\Common\IdentityInterface;
+use G4\DataMapper\Common\MappingInterface;
+use G4\RussianDoll\Key;
 
 class DataRepository
 {
-    const DELIMITER = "|";
+    final public const DELIMITER = "|";
 
-    /**
-     * @var StorageContainer
-     */
-    private $storageContainer;
+    private ?IdentityInterface $identity = null;
 
-    /*
-     * @var \G4\DataMapper\Common\IdentityInterface
-     */
-    private $identity;
+    private ?string $identityMapKey = null;
 
-    private $identityMapKey;
+    private ?Key $russianDollKey = null;
 
-    /*
-     * @var \G4\RussianDoll\Key
-     */
-    private $russianDollKey;
-
-    /**
-     * @var MapperCollection
-     */
-    private $map;
+    private ?MapperCollection $map = null;
 
     /**
      * Repository constructor.
-     * @param StorageContainer $storageContainer
      */
-    public function __construct(StorageContainer $storageContainer)
+    public function __construct(private readonly StorageContainer $storageContainer)
     {
-        $this->storageContainer = $storageContainer;
     }
 
-    /**
-     * @param $datasetName
-     * @return $this
-     */
-    public function setDatasetName($datasetName)
+    public function setDatasetName(string $datasetName): self
     {
         $this->storageContainer->setDatasetName($datasetName);
         return $this;
     }
 
-    public function setIdentity(\G4\DataMapper\Common\IdentityInterface $identity)
+    public function setIdentity(IdentityInterface $identity): self
     {
         $this->identity = $identity;
         return $this;
     }
 
-    public function setRussianDollKey(\G4\RussianDoll\Key $russianDollKey)
+    public function setRussianDollKey(Key $russianDollKey): self
     {
         $this->russianDollKey = $russianDollKey;
         $this->identityMapKey = (string) $russianDollKey;
         return $this;
     }
 
-    public function setIdentityMapKey(...$identityMapKey)
+    public function setIdentityMapKey(...$identityMapKey): self
     {
         $this->identityMapKey = implode(self::DELIMITER, $identityMapKey);
         return $this;
     }
 
-    /*
-     * @return RepositoryResponse
-     */
-    public function select()
+    public function select(): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         $query = new RepositoryQuery();
 
-        if ($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
+        if ($this->getRussianDollKey() instanceof Key) {
             $query->setRussianDollKey($this->getRussianDollKey());
         }
 
-        if ($this->getIdentity() instanceof \G4\DataMapper\Common\IdentityInterface) {
+        if ($this->getIdentity() instanceof IdentityInterface) {
             $query->setIdentity($this->getIdentity());
         }
 
@@ -90,11 +69,11 @@ class DataRepository
         return (new ReadRepository($this->storageContainer))->read($query);
     }
 
-    public function query($customQuery)
+    public function query($customQuery): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         $query = new RepositoryQuery();
         $query->setCustomQuery($customQuery);
-        if ($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
+        if ($this->getRussianDollKey() instanceof Key) {
             $query->setRussianDollKey($this->getRussianDollKey());
         }
 
@@ -105,14 +84,14 @@ class DataRepository
         return (new ReadRepository($this->storageContainer))->read($query);
     }
 
-    public function queryNoCache($customQuery)
+    public function queryNoCache($customQuery): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         $query = new RepositoryQuery();
         $query->setCustomQuery($customQuery);
         return (new ReadRepository($this->storageContainer))->readNoCache($query);
     }
 
-    public function simpleQuery($customQuery)
+    public function simpleQuery($customQuery): SimpleDataRepositoryResponse | DataRepositoryResponse
     {
         $query = new RepositoryQuery();
         $query->setCustomQuery($customQuery);
@@ -120,20 +99,20 @@ class DataRepository
         return (new ReadRepository($this->storageContainer))->simpleQuery($query);
     }
 
-    public function command($customCommand)
+    public function command($customCommand): void
     {
         $command = $this->getCommand();
         $command->setCustomCommand($customCommand);
         (new WriteRepository($this->storageContainer))->write($command);
     }
 
-    public function setMapping(MappingInterface ...$maps)
+    public function setMapping(MappingInterface ...$maps): self
     {
         $this->map = new MapperCollection($maps);
         return $this;
     }
 
-    public function insert()
+    public function insert(): void
     {
         $command = $this->getCommand();
         $command->insert($this->map);
@@ -145,52 +124,52 @@ class DataRepository
         try {
             $insertId = $this->queryNoCache('SELECT LAST_INSERT_ID() AS LAST_INSERT_ID')->getOne();
             return $insertId['LAST_INSERT_ID'];
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
     }
 
-    public function update()
+    public function update(): void
     {
         $command = $this->getCommand();
         $command->update($this->map, $this->getIdentity());
         (new WriteRepository($this->storageContainer))->write($command);
     }
 
-    public function upsert()
+    public function upsert(): void
     {
         $command = $this->getCommand();
         $command->upsert($this->map);
         (new WriteRepository($this->storageContainer))->write($command);
     }
 
-    public function delete()
+    public function delete(): void
     {
         $command = $this->getCommand();
         $command->delete($this->getIdentity());
         (new WriteRepository($this->storageContainer))->write($command);
     }
 
-    public function getIdentity()
+    public function getIdentity(): ?IdentityInterface
     {
         return $this->identity;
     }
 
-    public function getIdentityMapKey()
+    public function getIdentityMapKey(): ?string
     {
         return $this->identityMapKey;
     }
 
-    public function getRussianDollKey()
+    public function getRussianDollKey(): ?Key
     {
         return $this->russianDollKey;
     }
 
-    private function getCommand()
+    private function getCommand(): RepositoryCommand
     {
         $command = new RepositoryCommand();
 
-        if ($this->getRussianDollKey() instanceof \G4\RussianDoll\Key) {
+        if ($this->getRussianDollKey() instanceof Key) {
             $command->setRussianDollKey($this->getRussianDollKey());
         }
 

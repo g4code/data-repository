@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class MissingIdentityMapKeyException extends Exception
 {
 
-    const MESSAGE = 'Missing identity map key';
+    final public const MESSAGE = 'Missing identity map key';
 
     public function __construct()
     {

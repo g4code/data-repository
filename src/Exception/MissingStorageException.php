@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class MissingStorageException extends Exception
 {
 
-    const MESSAGE = 'Expected at least one storage, none given.';
+    final public const MESSAGE = 'Expected at least one storage, none given.';
 
     public function __construct()
     {
