@@ -4,35 +4,21 @@ namespace G4\DataRepository;
 
 class MapperCollection implements \Iterator, \Countable
 {
-    /**
-     * @var int
-     */
-    private $total;
+    private ?int $total = null;
 
-    /**
-     * @var array
-     */
-    private $keyMap;
+    private array $keyMap;
 
-    /**
-     * @var array
-     */
-    private $rawData;
+    private array $rawData;
 
-    /**
-     * @var int
-     */
-    private $pointer;
+    private int $pointer = 0;
 
     /**
      * MapperCollection constructor.
-     * @param array $data
      */
     public function __construct(array $data)
     {
         $this->keyMap  = array_keys($data);
         $this->rawData = $data;
-        $this->pointer = 0;
     }
 
     /**
@@ -47,9 +33,6 @@ class MapperCollection implements \Iterator, \Countable
         return $this->total;
     }
 
-    /**
-     * @return mixed|null
-     */
     public function current(): mixed
     {
         if ($this->pointer >= $this->count()) {
@@ -73,7 +56,6 @@ class MapperCollection implements \Iterator, \Countable
 
     /**
      * Return the key of the current element
-     * @return int
      */
     public function key(): mixed
     {
@@ -98,34 +80,22 @@ class MapperCollection implements \Iterator, \Countable
         $this->pointer = 0;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasData()
+    public function hasData(): bool
     {
         return $this->count() > 0;
     }
 
-    /**
-     * @return array
-     */
-    public function getRawData()
+    public function getRawData(): array
     {
         return $this->rawData;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasCurrentRawData()
+    private function hasCurrentRawData(): bool
     {
         return isset($this->keyMap[$this->pointer]) && isset($this->rawData[$this->keyMap[$this->pointer]]);
     }
 
-    /**
-     * @return array
-     */
-    private function currentRawData()
+    private function currentRawData():  mixed
     {
         return $this->rawData[$this->keyMap[$this->pointer]];
     }

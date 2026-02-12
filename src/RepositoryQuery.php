@@ -2,48 +2,42 @@
 
 namespace G4\DataRepository;
 
+use G4\DataMapper\Common\IdentityInterface;
 use G4\DataRepository\Exception\InvalidQueryException;
 use G4\DataRepository\Exception\MissingIdentityException;
 use G4\DataRepository\Exception\MissingIdentityMapKeyException;
 use G4\DataRepository\Exception\MissingRussianDollKeyException;
+use G4\RussianDoll\Key;
 
 class RepositoryQuery
 {
-    const DELIMITER = "|";
-    /*
-     * @var \G4\DataMapper\Common\IdentityInterface
-     */
-    private $identity;
+    final public const DELIMITER = "|";
 
-    private $identityMapKey;
+    private ?IdentityInterface $identity = null;
+
+    private ?string $identityMapKey = null;
 
     private $customQuery;
 
-    /*
-     * @var \G4\RussianDoll\Key
-     */
-    private $russianDollKey;
+    private ?Key $russianDollKey = null;
 
-    /**
-     * @return \G4\DataMapper\Common\IdentityInterface
-     */
-    public function getIdentity()
+    public function getIdentity(): ?IdentityInterface
     {
-        if (!$this->identity instanceof \G4\DataMapper\Common\IdentityInterface) {
+        if (!$this->identity instanceof IdentityInterface) {
             throw new MissingIdentityException();
         }
         return $this->identity;
     }
 
-    public function getRussianDollKey()
+    public function getRussianDollKey(): ?Key
     {
-        if (!$this->russianDollKey instanceof \G4\RussianDoll\Key) {
+        if (!$this->russianDollKey instanceof Key) {
             throw new MissingRussianDollKeyException();
         }
         return $this->russianDollKey;
     }
 
-    public function getIdentityMapKey()
+    public function getIdentityMapKey(): ?string
     {
         if (empty($this->identityMapKey)) {
             throw new MissingIdentityMapKeyException();
@@ -51,7 +45,10 @@ class RepositoryQuery
         return $this->identityMapKey;
     }
 
-    public function getCustomQuery()
+    /**
+     * @throws InvalidQueryException
+     */
+    public function getCustomQuery(): mixed
     {
         if (!$this->hasCustomQuery()) {
             throw new InvalidQueryException();
@@ -59,31 +56,31 @@ class RepositoryQuery
         return $this->customQuery;
     }
 
-    public function setIdentity(\G4\DataMapper\Common\IdentityInterface $identity)
+    public function setIdentity(IdentityInterface $identity): self
     {
         $this->identity = $identity;
         return $this;
     }
 
-    public function setRussianDollKey(\G4\RussianDoll\Key $russianDollKey)
+    public function setRussianDollKey(Key $russianDollKey): self
     {
         $this->russianDollKey = $russianDollKey;
         return $this;
     }
 
-    public function setIdentityMapKey(...$identityMapKey)
+    public function setIdentityMapKey(...$identityMapKey): self
     {
         $this->identityMapKey = join(self::DELIMITER, $identityMapKey);
         return $this;
     }
 
-    public function setCustomQuery($query)
+    public function setCustomQuery($query): self
     {
         $this->customQuery = $query;
         return $this;
     }
 
-    public function hasCustomQuery()
+    public function hasCustomQuery(): bool
     {
         return !empty($this->customQuery);
     }

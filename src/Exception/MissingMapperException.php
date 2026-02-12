@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class MissingMapperException extends Exception
 {
 
-    const MESSAGE = 'Expected mapper  \G4\DataRepository\MapperCollection.';
+    final public const MESSAGE = 'Expected mapper  \G4\DataRepository\MapperCollection.';
 
     public function __construct()
     {

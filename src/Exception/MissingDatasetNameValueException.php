@@ -7,7 +7,7 @@ use G4\DataRepository\ErrorCodes;
 
 class MissingDatasetNameValueException extends Exception
 {
-    const MESSAGE = 'Missing dataset name(table name) value.';
+    final public const MESSAGE = 'Missing dataset name(table name) value.';
 
     public function __construct()
     {

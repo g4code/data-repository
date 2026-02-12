@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class MissingCustomCommandException extends Exception
 {
 
-    const MESSAGE = 'Missing custom command.';
+    final public const MESSAGE = 'Missing custom command.';
 
     public function __construct()
     {

@@ -8,7 +8,7 @@ use G4\DataRepository\ErrorCodes;
 class MissingResponseAllDataException extends Exception
 {
 
-    const MESSAGE = 'Missing response all data';
+    final public const MESSAGE = 'Missing response all data';
 
     public function __construct()
     {

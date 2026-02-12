@@ -2,11 +2,13 @@
 
 namespace G4\DataRepository;
 
+use G4\DataMapper\Common\RawData;
+use G4\DataMapper\Common\SimpleRawData;
 use G4\ValueObject\Dictionary;
 
 class RepositoryResponseFactory
 {
-    public function createSimple(\G4\DataMapper\Common\SimpleRawData $rawData)
+    public function createSimple(SimpleRawData $rawData): SimpleDataRepositoryResponse
     {
         return new SimpleDataRepositoryResponse(
             $rawData->getAll(),
@@ -14,7 +16,7 @@ class RepositoryResponseFactory
         );
     }
 
-    public function create(\G4\DataMapper\Common\RawData $rawData)
+    public function create(RawData $rawData): DataRepositoryResponse
     {
         return new DataRepositoryResponse(
             $rawData->getAll(),
@@ -23,7 +25,7 @@ class RepositoryResponseFactory
         );
     }
 
-    public function createFromArray(Dictionary $data)
+    public function createFromArray(Dictionary $data): DataRepositoryResponse
     {
         return new DataRepositoryResponse(
             $data->get(RepositoryConstants::DATA),
@@ -32,12 +34,12 @@ class RepositoryResponseFactory
         );
     }
 
-    public function createEmptyResponse()
+    public function createEmptyResponse(): DataRepositoryResponse
     {
         return new DataRepositoryResponse([], 0, 0);
     }
 
-    public function createSimpleEmptyResponse()
+    public function createSimpleEmptyResponse(): SimpleDataRepositoryResponse
     {
         return new SimpleDataRepositoryResponse([], 0);
     }
